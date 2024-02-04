@@ -1,0 +1,29 @@
+.ant-dropdown.ant-dropdown-hidden.css-dev-only-do-not-override-1b0bdye.ant-dropdown-placement-topLeft{
+
+    height: 200px;
+}
+
+.fixedDropdownTable .ant-select-selector .ant-select-selection-item{
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    color: #484964 !important;
+    padding: 0 !important;
+}
+
+.fixedDropdownTable .ant-select-selector{
+    padding: 0 !important;
+
+}
+
+.customDynamicColumn .ant-table-column-title{
+    color: #484964 !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+
+}
+
+.ant-table td {
+    font-size: 12px !important; 
+    padding: 1px !important;
+    /* Change this value to your desired font size */
+  }

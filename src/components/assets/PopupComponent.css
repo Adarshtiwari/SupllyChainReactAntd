@@ -1,0 +1,37 @@
+/* PopupComponent.css */
+
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgb(238, 241, 246);
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+  text-align: center;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.popup p {
+  margin-bottom: 10px;
+}
+
+/* .popup input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+} */
+
+.popup button {
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.popup button:last-child {
+  margin-right: 0;
+}

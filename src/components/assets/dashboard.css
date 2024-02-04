@@ -1,0 +1,407 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.mainDahbordSec{
+    width: 100%;
+    height: 100vh;
+    background-color: rgb(238, 241, 246);
+    position: relative;
+}
+
+
+/* left side panel */
+.leftSideNav{
+    position: absolute;
+    height: 100%;
+    width: 5%;
+    border-right: 1px solid rgb(232, 229, 229) ;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.first_icon{
+    position: fixed;
+    top: 6%;
+}
+.first_icon .img_show{
+    border-radius: 50%;
+    padding: 6px;
+    background-color: #4254F9;
+    cursor: pointer;
+    position: relative;
+}
+.img_show img{
+    width: 20px;
+    color: white !important;
+    filter: brightness(0) invert(1);
+   
+}
+.img_show hr {
+    position: absolute;
+    top: 65%;
+   border: 1px solid #fff;
+   margin: 0 !important;
+   padding: 0 !important;
+   width: 20px;
+}
+
+
+.middleIcon{
+    position: fixed;
+    top: 21%;
+}
+
+
+.icon_sec {
+    margin: 20px;
+    border-radius: 50%;
+    padding: 13px;
+    background-color: #fff;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+ .icon {
+    color: #a3b3b8;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px; 
+    border-radius: 50%;
+    width: 5px; 
+    height: 5px;
+    background-color: #fff; 
+}
+
+.icon img{
+    width: 30px;
+    filter: invert(8%) sepia(8%) saturate(8%) hue-rotate(100deg) brightness(1%) contrast(20%) ;
+    
+}
+
+.chc img {
+    filter: invert(27%) sepia(70%) saturate(1279%) hue-rotate(195deg) brightness(74%) contrast(84%);
+}
+
+
+.lastIcon{
+    position: fixed;
+    bottom: 2%;
+}
+.belowicon_sec{
+    margin: 10px;
+    border-radius: 50%;
+    padding: 10px;
+}
+
+
+/* top panel */
+.topSideNav{
+    position: absolute;
+    top: 0;
+    left: 5%;
+    width: 95%;
+    height: 95px;
+    border-bottom: 1px solid rgb(232, 229, 229) ;
+    padding: 20px ;
+}
+
+.topFirstSec{
+    display: flex;
+    justify-content: space-between;
+    /* padding-top: 20px; */
+    color: #4e5e63;
+}
+
+.inputSec{
+    padding: 7px;
+    border-radius: 20px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    color: #a3b3b8;
+
+}
+.inputSec input{
+    border-radius: 20px;
+    padding: 8px;
+    background-color: #F9F9FC;
+    border: none;
+}
+.inputSec .infosign {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1px solid #a3b3b8;
+    text-align: center;
+    line-height: 12px; /* Center the content vertically */
+    font-weight: 500; /* Optional: Adjust the font weight as needed */
+}
+
+.inputSec .img_sec {
+    /* width: 35px;
+    height: 35px; */
+    border-radius: 50%; /* Use 50% for a circular shape */
+    border: 1px solid  #a3b3b8;;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.inputSec .img_sec img {
+    width: 30px;
+    height: 30px; /* Adjust the height to maintain the aspect ratio */
+    border-radius: 50%; /* Ensure the image inside is also circular */
+    object-fit: cover; /* Ensure the image covers the entire container */
+}
+
+/* topsecon sec */
+
+.chcolor{
+    color: rgb(66,133,244) !important;
+    font-weight: 400;
+    font-size: 14px;
+ 
+}
+.topSecondSec{
+    position: absolute;
+    bottom: 0;
+    /* left: 2%; */
+    display: flex;
+    color: #a3b3b8;
+
+}
+.toppathsec{
+    padding-right: 20px;
+}
+.toppathsec img{
+    width: 30px;
+    filter: invert(8%) sepia(8%) saturate(8%) hue-rotate(100deg) brightness(1%) contrast(20%) !important;
+
+}
+.toppathsec .imgIcon{
+    display: flex;
+}
+
+
+.topSecondSec span{
+    padding: 0px 5px;
+    color:#4e5e63 ;
+    font-size: 14px;
+}
+
+/* filter section  */
+
+.filterSec{
+    position: absolute;
+    left: 5%;
+    top: 100px;
+    width: 95%;
+    padding: 0px 20px;
+    display: flex;
+    justify-content: space-between;
+}
+.date-picker-container{
+    position: absolute;
+    top: 30px;
+}
+.dateFilter{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    position: relative;
+    z-index: 9999;
+    padding: 4px;
+}
+.dateFilter h3{
+    font-weight: 500;
+    font-size: 17px;
+}
+.dateFilter h5{
+    font-weight: 400;
+    font-size: 14px;
+}
+.dateFilter h4{
+    font-weight: 500;
+    font-size: 14px;
+}
+.dateFilter .sdate{
+    cursor: pointer;
+    color: rgb(66,133,244) !important;
+}
+.filter{
+    position: absolute;
+    /* top: 20px; */
+    right: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    color: #646666;
+   
+}
+.filter .flicon{
+    border: 1px solid #646666;
+    background-color: #4254F9;
+    padding:  6px 12px;
+    border-radius: 20px;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+  
+}
+.filter .flicon span{
+    font-size: 14px;
+}
+/* .filter p{
+    font-size: 14px;
+    cursor: pointer;
+    color: #646666;
+} */
+.filterSec #selectedoption{
+    margin-left: 20px;
+    cursor: pointer;
+    color: rgb(66, 133, 244);
+    border: none;
+    background: none;
+}
+
+.dateFilter #selectedoption{
+    margin-left: 20px;
+    cursor: pointer;
+    color: rgb(66, 133, 244);
+    border: none;
+    background: none;
+}
+
+
+
+
+
+/* planing overview */
+
+.planOverview{
+    position: absolute;
+    left: 5%;
+    top: 130px;
+    width: 95%;
+    bottom: 0%;
+    height: auto;
+    padding: 10px;
+   
+   
+}
+.planOverview .chartTable {
+    position: relative;
+    width: 100%;
+    height:100%; /* Set the height of the parent container to full viewport height */
+    display: flex;
+    flex-direction: column; /* Stack the child divs vertically */
+    gap: 15px;
+    /* border: 1px solid black; */
+}
+
+.planOverview .chartTable .chart {
+    /* flex: 1; */
+    height: 40%;
+    width: 100%; /* Take full width */
+    border: 1px solid rgb(232, 229, 229);
+    position: relative;
+    /* display: none; */
+}
+
+.planOverview .chartTable .table {
+    /* flex: 1; */
+    height: 60%; /* Take 50% of the height */
+    width: 100%; /* Take full width */
+    border: 1px solid rgb(232, 229, 229);
+   
+}
+
+/* Additional styling for each component if needed */
+.planOverview .chartTable .chart {
+    background-color: hsl(0, 0%, 99%); /* Example background color for the chart div */
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-radius: 10px;
+    /* padding: 10px; */
+}
+
+.planOverview .chartTable .table {
+    /* background-color: #e0e0e0; Example background color for the table div */
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-radius: 10px;
+    /* padding: 3px; */
+    display: flex;
+    justify-content:space-around;
+}
+
+.insideTableicon{
+    padding: 10px;
+    display: block;
+}
+.insideTableicon .plusicon {
+    height: 25px; /* Adjust the height as needed */
+    width: 25px; /* Adjust the width as needed */
+    background-color: #fff;
+    border-radius: 50%;
+    /* border: 1px solid #646666; */
+    color: rgb(66, 133, 244);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: relative;
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+  .insideTableicon .plusicon span{
+    position: absolute;
+    top: -10px;
+    font-size: 28px; 
+
+    
+}
+.insideTableicon .maxminicon{
+    padding-left: 3px;
+    font-size: 20px;
+    cursor: pointer;
+}
+.insideTableicon .maxminicon:hover{
+    color: rgb(66, 133, 244);
+}
+
+/* media query */
+@media screen and (max-width: 1100px) {
+
+    .topSideNav {
+        padding: 10px;
+    }
+    .inputSec{
+        padding: 4px;
+    
+    }
+
+    .filterSec #selectedoption {
+        margin-left: 3px;
+        cursor: pointer;
+    }
+    .filterSec {
+       
+        padding: 0px 10px;
+
+    }
+  
+}
+

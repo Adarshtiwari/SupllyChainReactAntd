@@ -1,0 +1,99 @@
+
+
+
+/* .chartBox{
+  
+    height: 260px;
+    border: 1px solid red;
+} */
+
+/* Table styling */
+.table-container {
+  margin-right: 5px;
+  overflow: auto; /* Allow both vertical and horizontal scrolling */
+  height: auto;
+  width: 100%;
+}
+
+/* WebKit browsers (Chrome, Safari) */
+.table-container::-webkit-scrollbar {
+  width: 5px; /* Set the width of the scrollbar */
+}
+
+/* Scrollbar track style */
+.table-container::-webkit-scrollbar-track {
+  background: #a3b3b8; /* Set the background color of the track */
+}
+
+/* Scrollbar thumb style */
+.table-container::-webkit-scrollbar-thumb {
+  background: #888; /* Set the color of the thumb */
+  border-radius: 10px; /* Set the border radius of the thumb */
+}
+
+/* Scrollbar thumb hover style */
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Set the color of the thumb on hover */
+}
+
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+ 
+  
+  th, td {
+    padding: 5px;
+    border: 1px solid #ddd;
+    text-align: left;
+    font-size: 13px;
+  }
+
+  td{
+    color:  #646666;
+  }
+  
+  /* Checkbox styling */
+  input[type="checkbox"] {
+    margin-right: 5px;
+    cursor: pointer;
+  }
+
+
+  .select-as-text {
+    border: none;
+    background: none;
+    /* appearance: none;  Removes default arrow icon */
+    font-size: 13px;  /* Inherits font size from the parent */
+    cursor: pointer;
+    outline: none;  /* Removes focus outline */
+    color: #646666;
+    font-weight: 600;
+}
+
+
+.chartBox{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.chartBox #chartstr{
+  width:  content-box;;
+  display: block;
+}
+
+/* .chartBox {
+  width: 100%;
+  overflow: hidden; 
+}
+
+#chartstr {
+  width: 100%;
+  height: 100%;
+  display: block;
+} */
+
