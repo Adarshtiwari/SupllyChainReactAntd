@@ -36,7 +36,7 @@
 //         console.error("Object is null or undefined");
 //       }
 
-//       console.log(checkpro,checkloc,checkcus)
+//       //console.log(checkpro,checkloc,checkcus)
 
 //       const selectedItem=checkpro;
 //       const selectedloc =checkloc;
@@ -230,7 +230,7 @@ function ChartData({ tabledata, selectedRowscheck, selectedColumn,slectColumnVal
 
   useEffect(() => {
     // selectedRowscheck=Object.values(selectedAllColumnData)
-console.log("selected valuec chartDa ",selectedAllColumnData,selectedRowscheck)
+//console.log("selected valuec chartDa ",selectedAllColumnData,selectedRowscheck)
 
     if (selectedRowscheck.length > 0) {
     
@@ -251,7 +251,7 @@ console.log("selected valuec chartDa ",selectedAllColumnData,selectedRowscheck)
         }
        
        
-        console.log("combination key prepare ",combinationKey)
+        //console.log("combination key prepare ",combinationKey)
         setSelectedItem(temp);
       }
     } else {
@@ -262,20 +262,20 @@ console.log("selected valuec chartDa ",selectedAllColumnData,selectedRowscheck)
     }
   }, [selectedRowscheck,selectedAllColumnData]);
 
-  // console.log(selectedItem,selectedloc,selectedcus)
+  // //console.log(selectedItem,selectedloc,selectedcus)
   useEffect(() => {
     let chart = null;
 
-    console.log(
-      " chartDA 2222",
-      "item",
-      selectedItem,
-      "location",
-      selectedloc,
-      "customer",
-      selectedcus
-    );
-    console.log(" chartDA 3333", tabledata);
+    // console.log(
+    //   " chartDA 2222",
+    //   "item",
+    //   selectedItem,
+    //   "location",
+    //   selectedloc,
+    //   "customer",
+    //   selectedcus
+    // );
+    // console.log(" chartDA 3333", tabledata);
 
     if (tabledata && tabledata.length > 0) {
       const sortedTableData = tabledata
@@ -287,10 +287,10 @@ console.log("selected valuec chartDa ",selectedAllColumnData,selectedRowscheck)
           return dateA - dateB;
         });
 
-      console.log("chartDA 4444", sortedTableData);
+      //console.log("chartDA 4444", sortedTableData);
 
     // custom logic for all type of data
-    console.log(" selected item  combination key",selectedItem )
+    //console.log(" selected item  combination key",selectedItem )
     let filteredTableDataWithLocAndCus=[]
    if(selectedItem.length>0)
    {
@@ -301,7 +301,7 @@ console.log("selected valuec chartDa ",selectedAllColumnData,selectedRowscheck)
       
         compareCombinationKey += element[slectColumnValue[j]]
       }
-      console.log("row key: ",selectedItem[0],"compare with",compareCombinationKey)
+      //console.log("row key: ",selectedItem[0],"compare with",compareCombinationKey)
 
       if(selectedItem.includes(compareCombinationKey))
       {
@@ -313,7 +313,7 @@ filteredTableDataWithLocAndCus=sortedTableData
    }
 
 
-      console.log("chartDA 8888", filteredTableDataWithLocAndCus);
+      //console.log("chartDA 8888", filteredTableDataWithLocAndCus);
 
       const middleIndex = Math.floor(filteredTableDataWithLocAndCus.length / 2);
 
@@ -330,7 +330,7 @@ filteredTableDataWithLocAndCus=sortedTableData
         (item) => (item.fdate !== null ? item.f_quantity_user : null)
       );
 
-      console.log(" dataValuesSqty",dataValuesSqty)
+      //console.log(" dataValuesSqty",dataValuesSqty)
       const chartDataObject = {
         labels: labels,
         datasets: [
@@ -389,7 +389,7 @@ filteredTableDataWithLocAndCus=sortedTableData
           Math.max(...dataValuesFQuantityEngineUser, 0)
         ) + 500;
 // maxYValue=2500
-        console.log(" the maximum value ",maxYValue, Math.max(...dataValuesSqty, 0),Math.max(...dataValuesFQuantityEngine, 0))
+        //console.log(" the maximum value ",maxYValue, Math.max(...dataValuesSqty, 0),Math.max(...dataValuesFQuantityEngine, 0))
       chart = new Chart(context, {
         type: "bar",
         data: chartDataObject,

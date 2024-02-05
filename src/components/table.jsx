@@ -18,6 +18,7 @@ import {
 } from "@ant-design/icons/lib/icons";
 import { API_URL, BaseUrl, tableMapping } from "../Constant/constant";
 import { test } from "../Constant/constant";
+import FilterModal from "./FilterModal";
 const App = () => {
   const [selectionType, setSelectionType] = useState("checkbox");
   const [apiData, setApiData] = useState([]);
@@ -48,6 +49,22 @@ const App = () => {
     location:"location"
 });
 
+//filter model
+
+const [filterModalVisible, setFilterModalVisible] = useState(false);
+
+const showFilterModal = () => {
+  setFilterModalVisible(true);
+};
+
+const closeFilterModal = () => {
+  setFilterModalVisible(false);
+};
+
+
+
+
+//close filter model data
 
 
   // const [tablechardata,settablechardata]=useState([]);
@@ -68,7 +85,7 @@ const App = () => {
       );
       setSelectedRowscheck(selectedRows);
       setSelectedRowsKeyCheck(selectedRowKeys)
-      console.log("resAPI ", setApiData(setSetfilterApiData));
+      //("resAPI ", setApiData(setSetfilterApiData));
     },
     getCheckboxProps: (record) => ({
       disabled: record.name === "Disabled User",
@@ -139,7 +156,7 @@ const App = () => {
   };
 
   const closePopup = (keys) => {
-    console.log("closeuo", keys);
+    //("closeuo", keys);
     setSelectedColumn(keys);
     setSelectrowValue(keys);
     let temp={}
@@ -171,11 +188,11 @@ const App = () => {
   // ************** Get Table Data on Click***********
   const getColumnData = async (newValue, pre) => {
     setSelectedRowsKeyCheck([])
-    console.log("new value0000", newValue, "old value ",pre,"current array  ", selectrowvalue);
+    //("new value0000", newValue, "old value ",pre,"current array  ", selectrowvalue);
  
 
     let updateColumnValue=selectrowvalue
-    console.log("old array value ",updateColumnValue)
+    //("old array value ",updateColumnValue)
 
     updateColumnValue.forEach((ele, index) => {
       if (ele === pre) {
@@ -183,22 +200,11 @@ const App = () => {
       }
   });
 
-    // selectrowvalue.forEach((ele)=>
-    // {
-    //   if(ele==pre)
-    //   {
-    //    updateColumnValue.push(newValue)
-    //   }
-    //   else{
-    //     updateColumnValue.push(ele)
-    //   }
-    // })
 
-    console.log("new array value ",updateColumnValue)
     setSelectrowValue(updateColumnValue)
     setSelectedKeys(updateColumnValue)
     getFilterData("", "", "", updateColumnValue)
-    console.log(" in the filter data ", selectrowvalue);
+    //(" in the filter data ", selectrowvalue);
     
   };
 
@@ -207,8 +213,8 @@ const App = () => {
     const selectedValuesArray = Object.values(selectedColumnValues);
     setLoading(true);
     setSelectedRowsKeyCheck([''])
-    console.log("Current selected values:", selectedValuesArray);
-    console.log("Adarsh Response  arrayData", arrayData.length);
+    //("Current selected values:", selectedValuesArray);
+    //("Adarsh Response  arrayData", arrayData.length);
     if (arrayData.length > 0) {
       let query = "";
 
@@ -225,10 +231,10 @@ const App = () => {
         "/?fields=" +
         query +
         ",sqty,sdate,fdate,f_quantity_engine,f_quantity_user";
-      console.log("Adarsh Response", url);
+      console.log("filter URL Preapred", url);
       const response = await axios.get(url);
      
-      console.log("Adarsh Response", response);
+      //("Adarsh Response", response);
       setresultApiData(response.data.results);
       setSetfilterApiData(response.data.results);
       let column = await tableData(response.data.results, arrayData);
@@ -246,10 +252,10 @@ const App = () => {
       const nonNullLocation = replaceNullValues(location, 1);
       const nonNullCustomerGroup = replaceNullValues(cusotmer, 2);
 
-      console.log(
-        "get url ",
-        nonNullProductGroup + "," + nonNullLocation + "," + nonNullCustomerGroup
-      );
+      // console.log(
+      //   "get url ",
+      //   nonNullProductGroup + "," + nonNullLocation + "," + nonNullCustomerGroup
+      // );
       let url =
         BaseUrl +
         "/?fields=" +
@@ -260,10 +266,10 @@ const App = () => {
         "," +
         nonNullCustomerGroup +
         ",sqty,sdate,fdate,f_quantity_engine,f_quantity_user";
-      console.log("get url ", url);
+      //console.log("get url ", url);
       const response = await axios.get(url);
       setLoading(false);
-      console.log("get url response", response);
+      //console.log("get url response", response);
       let keys = [nonNullProductGroup, nonNullLocation, nonNullCustomerGroup];
       let column = await tableData(response.data.results, keys);
     
@@ -281,20 +287,21 @@ const App = () => {
           // "https://horizon-app.onrender.com/api/forecastmains/"
         );
        
+        console.log("get first API CallData ", response.data.results);
         let column = await tableData(response.data.results, [
           "item",
           "customer",
           "location",
         ]);
 
-        console.log("columns ", column);
+        console.log("Table Data PrePared For First API Call ", column);
         setLoading(false);
         setcolumns(column.precolumns);
         setStatetableData(column.tableData);
-        console.log(" 100", statecolumns);
-        console.log(" 101", statetableData);
+        //console.log(" 100", statecolumns);
+        //console.log(" 101", statetableData);
 
-        console.log(" the result data final,", response);
+        //console.log(" the result data final,", response);
         setApiData(response.data);
         setresultApiData(response.data.results);
         // onChartData()
@@ -321,7 +328,7 @@ const App = () => {
 
     // Construct the final formatted date string
     const formattedDateString = `${formattedDay}/${formattedMonth}/${year}`;
-    console.log("formattedDateString", formattedDateString);
+    //console.log("formattedDateString", formattedDateString);
     return formattedDateString;
   };
 
@@ -347,17 +354,17 @@ const App = () => {
 
       // Construct the final formatted date string
       const formattedDateString = `${formattedDay}/${formattedMonth}/${year}`;
-      console.log("formattedDateString", formattedDateString);
+      //console.log("formattedDateString", formattedDateString);
       element = formattedDateString;
-      console.log("element", element);
+      //console.log("element", element);
       newArray.push(element);
     });
 
     let precolumn = [];
-    console.log("mydata orignal keys ", keys);
+    //console.log("mydata orignal keys ", keys);
     precolumn = await createColumns(keys);
-    console.log("mydata orignal after call ", precolumn);
-    console.log("newArray", newArray);
+    //console.log("mydata orignal after call ", precolumn);
+    //console.log("newArray", newArray);
     for (let i = 0; i < newArray.length; i++) {
       let temp = {
         title: newArray[i],
@@ -383,22 +390,22 @@ const App = () => {
       precolumn.push(temp);
     }
 
-    console.log("mydata orignal after array ", precolumn);
+    //console.log("mydata orignal after array ", precolumn);
 
     /// creating the data for table
-    console.log("resultful APi ", resutlAPI);
+    //console.log("resultful APi ", resutlAPI);
     let tableData = await createtableData(resutlAPI, keys);
-    console.log(" all table data", tableData);
+    //console.log(" all table data", tableData);
     let sentData = {
       precolumns: precolumn,
       tableData: tableData,
     };
-    console.log(" sent data ", sentData);
+    //console.log(" sent data ", sentData);
     return sentData;
   };
 
   const createtableData = (resutlAPI, keys) => {
-    console.log("keys ", keys);
+    //console.log("keys ", keys);
     let tableData = new Map();
     resutlAPI.forEach((ele) => {
       let combinationKey = "";
@@ -409,32 +416,32 @@ const App = () => {
           combinationKey += ele[keys[i]] + "-";
         }
       }
-      console.log("combinationkey", combinationKey);
+      //console.log("combinationkey", combinationKey);
       if (tableData.has(combinationKey)) {
         let temp = tableData.get(combinationKey);
         let getdate = getDataFormate(ele.sdate);
-        // console.log("getdate ",getdate)
-        // console.log(" temp  ",temp)
+        // //console.log("getdate ",getdate)
+        // //console.log(" temp  ",temp)
         if (temp.hasOwnProperty(getdate)) {
-          // console.log("datasame ",temp.sdate)
+          // //console.log("datasame ",temp.sdate)
           temp[getdate] += ele.sum_sqty;
         } else {
           temp[getdate] = ele.sum_sqty;
         }
 
-        // console.log("final temp for  ",ele.item , "is: ",temp)
+        // //console.log("final temp for  ",ele.item , "is: ",temp)
         tableData.set(combinationKey, temp);
       } else {
         let getData = getDataFormate(ele.sdate);
         ele[getData] = ele.sum_sqty;
-        // console.log(" get data",getData)
-        // console.log(" crete for ",ele.item,"is ****", ele)
+        // //console.log(" get data",getData)
+        // //console.log(" crete for ",ele.item,"is ****", ele)
         tableData.set(combinationKey, ele);
       }
     });
     let arrayFromMap = Array.from(tableData.values());
 
-    console.log("1001 arraydata", arrayFromMap);
+    //console.log("1001 arraydata", arrayFromMap);
     return arrayFromMap;
   };
 
@@ -443,7 +450,7 @@ const App = () => {
       const response = await axios.get(
         "https://horizon-app.onrender.com/api/config"
       );
-      console.log(" in the get column 1 ", find);
+      console.log(" in subcolumn find value ", find);
       let subColumns = [];
       let temp1;
       let substring = "";
@@ -463,7 +470,7 @@ const App = () => {
       let filterData;
       if (key != "") {
         filterData = response.data.mapping_table_names[key];
-        console.log("mapping template", filterData);
+        //console.log("mapping template", filterData);
         temp1 = {
           value: find,
           label: find,
@@ -471,24 +478,13 @@ const App = () => {
       }
 
       if (key == "") {
-        console.log(" key found  ", key);
+        //console.log(" key found  ", key);
         let columns = ["Item", "Location", "Customer"];
         for (let i = 0; i < columns.length; i++) {
-          console.log(
-            " key found in the ",
-            response.data.mapping_table_names[columns[i]]
-          );
-          console.log(
-            "call for 222",
-            response.data.mapping_table_names[columns[i]].hasOwnProperty(find)
-          );
           if (
             response.data.mapping_table_names[columns[i]].hasOwnProperty(find)
           ) {
-            console.log(
-              " in the get column 3333",
-              response.data.mapping_table_names[columns[i]]
-            );
+          
             filterData = response.data.mapping_table_names[columns[i]];
 
             substring = find.slice(0, -1);
@@ -511,7 +507,7 @@ const App = () => {
           subColumns.push(temp);
         }
       }
-      console.log("subcloumns 9999", subColumns);
+      //console.log("subcloumns 9999", subColumns);
       return subColumns;
     } catch (error) {}
   };
@@ -521,10 +517,10 @@ const App = () => {
     let precolumn = [];
 
     for (let i = 0; i < columns.length; i++) {
-      console.log("call for ", columns[i]);
+      //console.log("call for ", columns[i]);
       columnsValue.push(await getColumnSubData(columns[i]));
     }
-    console.log(" get subcolumn ", columnsValue);
+    //console.log(" get subcolumn ", columnsValue);
     let setcolumnValue = selectrowvalue;
     for (let i = 0; i < columns.length; i++) {
       if (setcolumnValue.length > 0) {
@@ -580,12 +576,12 @@ const App = () => {
         // ellipsis: true
       };
 
-      console.log(" pre");
+      //console.log(" pre");
       precolumn.push(temp);
     }
     
   
-    console.log("precolumn mydata ", precolumn);
+    //console.log("precolumn mydata ", precolumn);
     return precolumn;
   };
 
@@ -599,16 +595,18 @@ const App = () => {
     <>
       <Row style={{ paddingLeft: "15px" }}>
         {/* <Col xs={22} sm={22} md={22} lg={22} xl={22}> */}{" "}
-        <Col xs={16} sm={14} md={24} lg={14} xl={16}>
+        <Col xs={16} sm={14} md={24} lg={15} xl={16}>
           {" "}
           <Datepick />
         </Col>
-        <Col xs={8} sm={10} md={24} lg={10} xl={8}>
+        <Col xs={8} sm={10} md={24} lg={9} xl={8}>
           {/* </Col> */}
+          
           <Button
             type="primary"
             icon={<FilterFilled />}
             style={{ fontSize: 13, borderRadius: 48, width: 80 }}
+            onClick={showFilterModal}
           >
             Filter
           </Button>{" "}
@@ -708,6 +706,9 @@ const App = () => {
           passapidata={test}
         />
       )}
+
+<FilterModal visible={filterModalVisible} onClose={closeFilterModal} />
+   
     </>
   );
 };

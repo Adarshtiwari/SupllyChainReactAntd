@@ -238,8 +238,8 @@ const items = [
 const menuItemStyle = {
   background: "#ffffff",
   borderRadius: 40,
-  width: 35,
-  height: 35,
+  width: 36,
+  height: 36,
   boxShadow: "rgba(0, 0, 0, 0.24) 0px 1px 4px",
   paddingLeft: 8,
   marginBottom: 10,
@@ -287,6 +287,7 @@ const BaseLayout = () => {
               paddingLeft: 10,
               marginTop: 55,
             }}
+        
           />
         </Menu>
         <Menu
@@ -303,16 +304,17 @@ const BaseLayout = () => {
             key="1"
             icon={
               <div>
-                <i class="fa-solid fa-house "></i>
+                <i class="fa-solid fa-house fa-lg"style={{paddingRight:9}}></i>
               </div>
             }
             style={menuItemStyle}
+            // title="adarsh"
           />
           <Menu.Item
             key="2"
             icon={
               <div>
-                <i class="fa-solid fa-sack-dollar "></i>
+                <i class="fa-solid fa-sack-dollar fa-lg" style={{paddingRight:12}}></i>
               </div>
             }
             style={menuItemStyle}
@@ -321,7 +323,7 @@ const BaseLayout = () => {
             key="3"
             icon={
               <div>
-                <i class="fa-solid fa-magnifying-glass"></i>
+                <i class="fa-solid fa-magnifying-glass fa-lg" style={{paddingRight:12}}></i>
               </div>
             }
             style={menuItemStyle}
@@ -330,7 +332,7 @@ const BaseLayout = () => {
             key="4"
             icon={
               <div>
-                <i class="fa-solid fa-earth-americas "></i>
+                <i class="fa-solid fa-earth-americas fa-lg" style={{paddingRight:12}}></i>
               </div>
             }
             style={menuItemStyle}
@@ -339,7 +341,7 @@ const BaseLayout = () => {
             key="5"
             icon={
               <div>
-                <i class="fa-solid fa-chart-simple"></i>
+                <i class="fa-solid fa-chart-simple fa-lg" style={{paddingRight:12}}></i>
               </div>
             }
             style={menuItemStyle}
@@ -348,7 +350,7 @@ const BaseLayout = () => {
             key="6"
             icon={
               <div>
-                <i class="fa-solid fa-truck"></i>
+                <i class="fa-solid fa-truck fa-lg" style={{paddingRight:12}}></i>
               </div>
             }
             style={menuItemStyle}
@@ -367,7 +369,7 @@ const BaseLayout = () => {
             key="1"
             icon={
               <div>
-                <i class="fa-regular fa-calendar-days"></i>
+                <i class="fa-regular fa-calendar-days fa-lg" style={{paddingRight:12}}></i>
               </div>
             }
           />
@@ -375,7 +377,7 @@ const BaseLayout = () => {
             key="2"
             icon={
               <div>
-                <i class="fa-solid fa-video"></i>
+                <i class="fa-solid fa-video fa-lg" style={{paddingRight:12}}></i>
               </div>
             }
           />
@@ -383,7 +385,7 @@ const BaseLayout = () => {
             key="3"
             icon={
               <div>
-                <i class="fa-regular fa-file-lines"></i>
+                <i class="fa-regular fa-file-lines fa-lg" style={{paddingRight:14}}></i>
               </div>
             }
           />
@@ -391,7 +393,7 @@ const BaseLayout = () => {
             key="4"
             icon={
               <div>
-                <i class="fa-solid fa-gear"></i>
+                <i class="fa-solid fa-gear" style={{paddingRight:12}}></i>
               </div>
             }
           />
