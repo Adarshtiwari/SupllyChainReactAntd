@@ -35,7 +35,7 @@ const App = () => {
   const [selectedRowscheck, setSelectedRowscheck] = useState([]);
   const [selectedOption, setSelectedOption] = useState("");
   const [loading, setLoading] = useState(true);
-
+  const [selectedRowsKeyCheck, setSelectedRowsKeyCheck] = useState([]);
   const [selectedColumn, setSelectedColumn] = useState([]);
   const [mappingId, setMappingId] = useState(null);
   const [selectrowvalue, setSelectrowValue] = useState([]);
@@ -67,7 +67,7 @@ const App = () => {
         selectedRows
       );
       setSelectedRowscheck(selectedRows);
-
+      setSelectedRowsKeyCheck(selectedRowKeys)
       console.log("resAPI ", setApiData(setSetfilterApiData));
     },
     getCheckboxProps: (record) => ({
@@ -79,8 +79,10 @@ const App = () => {
 
   const tableStyle = {
     backgroundColor: "#F9F9FC",
-    height: "230px",
-
+    height: "100%",
+    marginBottom: 0,
+    minHeight: '100%'
+    
     // Set your desired background color
   };
   // changes
@@ -168,6 +170,7 @@ const App = () => {
 
   // ************** Get Table Data on Click***********
   const getColumnData = async (newValue, pre) => {
+    setSelectedRowsKeyCheck([])
     console.log("new value0000", newValue, "old value ",pre,"current array  ", selectrowvalue);
  
 
@@ -202,6 +205,8 @@ const App = () => {
   // ******* calling api to get filter data
   const getFilterData = async (item, location, cusotmer, arrayData) => {
     const selectedValuesArray = Object.values(selectedColumnValues);
+    setLoading(true);
+    setSelectedRowsKeyCheck([''])
     console.log("Current selected values:", selectedValuesArray);
     console.log("Adarsh Response  arrayData", arrayData.length);
     if (arrayData.length > 0) {
@@ -222,12 +227,15 @@ const App = () => {
         ",sqty,sdate,fdate,f_quantity_engine,f_quantity_user";
       console.log("Adarsh Response", url);
       const response = await axios.get(url);
+     
       console.log("Adarsh Response", response);
       setresultApiData(response.data.results);
       setSetfilterApiData(response.data.results);
       let column = await tableData(response.data.results, arrayData);
+     
       setcolumns(column.precolumns);
       setStatetableData(column.tableData);
+      setLoading(false);
     } else {
       const columnsArray = ["item", "location", "customer"];
       setMappingId("id");
@@ -254,9 +262,11 @@ const App = () => {
         ",sqty,sdate,fdate,f_quantity_engine,f_quantity_user";
       console.log("get url ", url);
       const response = await axios.get(url);
+      setLoading(false);
       console.log("get url response", response);
       let keys = [nonNullProductGroup, nonNullLocation, nonNullCustomerGroup];
       let column = await tableData(response.data.results, keys);
+    
       setcolumns(column.precolumns);
       setStatetableData(column.tableData);
     }
@@ -366,7 +376,7 @@ const App = () => {
 
           return aValue - bValue;
         },
-        render: (text) => (text === null || text === undefined ? 0 : text),
+        render: (text) => <a style={{color: "#4285F4", fontWeight: 400}}>{(text === null || text === undefined ? 0 : text)}</a>,
         className: "customDynamicColumn",
         // selected: selectedValue,
       };
@@ -540,7 +550,7 @@ const App = () => {
                 maxWidth: "180px", // Set your desired height
                 minWidth: "150px",
                 overflowY: "auto",
-                fontSize: "12px",
+                fontSize: '12px',
               }}
               style={{
                 paddingLeft: "5px",
@@ -548,6 +558,8 @@ const App = () => {
                 border: "none",
                 width: "100%",
                 borderRadius: "none",
+                fontSize: '12px',
+
               }}
               className="fixedDropdownTable"
               variant="borderless"
@@ -638,12 +650,12 @@ const App = () => {
       </Row>
       <Row>
         <div className="card-body-2">
-          <Row gutter={16}>
-            <Col xs={1} sm={1} md={1} lg={1} xl={1}>
+          <Row gutter={16} style={{height: "100%" }}>
+            <Col xs={1} sm={1} md={1} lg={1} xl={1} style={{height: "100%"}}>
               <Button
                 type="link"
                 size="small"
-                style={{ fontSize: "20px", margin: "6px" }}
+                style={{ fontSize: "18px", marginLeft: 6, marginTop: 6 }}
                 // onClick={showModal}
                 onClick={handlePlusIconClick}
               >
@@ -652,7 +664,7 @@ const App = () => {
               <Button
                 type="link"
                 size="small"
-                style={{ fontSize: "20px", margin: "6px" }}
+                style={{ fontSize: "18px", marginLeft: 6, marginTop: 6  }}
                 onClick={handleMaximizeToggle}
               >
                 {isMaximized ? (
@@ -662,7 +674,7 @@ const App = () => {
                 )}
               </Button>
             </Col>
-            <Col xs={23} sm={23} md={23} lg={23} xl={23}>
+            <Col xs={23} sm={23} md={23} lg={23} xl={23} style={{height: "100%",}}>
               <Table
                 loading={loading}
                 rowSelection={{
@@ -673,12 +685,12 @@ const App = () => {
                 // pagination={paginationConfig}
                 dataSource={statetableData}
                 style={tableStyle}
-                size="small"
+                // size="large" 
                 scroll={{ x: 1500, y: 200 }}
                 // rowKey="id"
                 rowKey="id"
-                bordered
                 pagination={false}
+                className="customCss custom-table"
                 // infinite
                 // onInfinite={() => fetchData()}
                 // hasMore={hasMore}

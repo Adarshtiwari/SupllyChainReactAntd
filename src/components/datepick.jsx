@@ -42,8 +42,9 @@ function Datepick() {
           // boxShadow: "rgba(0, 0, 0, 0.24) 0px 1px 2px",
           width: 100,
           color: "#4285F4",
-          fontSize:12
+          fontSize:12,
         }}
+        className="custom-class"
       ></DatePicker>
       <Text strong style={{ fontSize: 12 }}>
         {""} to{" "}

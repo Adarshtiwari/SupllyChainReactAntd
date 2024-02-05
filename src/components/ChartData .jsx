@@ -427,7 +427,13 @@ filteredTableDataWithLocAndCus=sortedTableData
               position: "top",
               labels:{
                 pointStyle: 'rectRounded',
-              }
+                usePointStyle: true,
+                pointStyleWidth: 70,
+                borderRadius: 20,
+                useBorderRadius: true,
+              },
+              align: "end"
+
             },
             annotation: {
               annotations: [
@@ -450,7 +456,7 @@ filteredTableDataWithLocAndCus=sortedTableData
           },
           layout: {
             padding: {
-              left: 10,
+              left: 5,
               right: 10,
               top: 10,
               bottom: 10,
