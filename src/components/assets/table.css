@@ -15,6 +15,15 @@
 
 }
 
+.fixedDropdownTable .ant-checkbox-checked .ant-checkbox-inner
+{
+
+    border-color:red !important;
+    background-color: red !important;
+
+
+}
+
 .customDynamicColumn .ant-table-column-title{
     color: #484964 !important;
     font-size: 12px !important;
