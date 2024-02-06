@@ -58,7 +58,7 @@ const App = () => {
   console.log(" in the column widht  ",colvalue)
     if("item" ==colvalue || "customer"==colvalue || "location"==colvalue)
     {
-      return "8%"
+      return "7%"
     }
     if(colvalue.startsWith("catt") )
     {
@@ -655,11 +655,11 @@ const closeFilterModal = () => {
     <>
       <Row style={{ paddingLeft: "15px" }}>
         {/* <Col xs={22} sm={22} md={22} lg={22} xl={22}> */}{" "}
-        <Col xs={16} sm={14} md={24} lg={15} xl={17}>
-          {" "}
+        <Col xs={16} sm={14} md={13} lg={13} xl={17}>
+          {/* {" "} */}
           <Datepick />
         </Col>
-        <Col xs={8} sm={10} md={24} lg={9} xl={7}>
+        <Col xs={8} sm={10} md={9} lg={11} xl={7} >
           {/* </Col> */}
           
           <FilterModal />

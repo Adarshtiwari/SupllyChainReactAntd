@@ -268,7 +268,7 @@ const BaseLayout = () => {
         <Menu
           mode="vertical"
           defaultSelectedKeys={["1"]}
-          style={{ background: "#F9F9FC" , marginTop: "1%", position: "fixed"}}
+          style={{ background: "#F9F9FC" , marginTop: "1%", position: "fixed" ,  width: 60, border:"none"}}
           className="sidbarMenu"
         >
           <Menu.Item
@@ -301,7 +301,8 @@ const BaseLayout = () => {
             background: "#F9F9FC",
             marginLeft: 10,
             position: "fixed",
-            width: 63
+            border:"none",
+            width: 50
           }}
         >
           <Menu.Item
@@ -369,7 +370,8 @@ const BaseLayout = () => {
             background: "#F9F9FC",
             position: "fixed",
             paddingRight:8,
-            width: 63
+            border:"none",
+            width: 55
           }}
         >
           <Menu.Item
