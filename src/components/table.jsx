@@ -58,19 +58,18 @@ const App = () => {
   console.log(" in the column widht  ",colvalue)
     if("item" ==colvalue || "customer"==colvalue || "location"==colvalue)
     {
-      return  28
+      return "8%"
     }
     if(colvalue.startsWith("catt") )
     {
-      return 53
+      return "10%"
     }
     if( colvalue.startsWith("latt"))
     {
-   
-      return 50
+      return "10%"
     }
     else{
-      return 43
+      return "10%"
     }
   };
 
@@ -122,13 +121,15 @@ const closeFilterModal = () => {
       // Column configuration not to be checked
       name: record.name,
     }),
+    columnWidth: 100
   };
 
   const tableStyle = {
     backgroundColor: "#F9F9FC",
     height: "100%",
     marginBottom: 0,
-    minHeight: '100%'
+    minHeight: '100%',
+    width:"100%"
     
     // Set your desired background color
   };
@@ -412,7 +413,8 @@ const closeFilterModal = () => {
       let temp = {
         title: newArray[i],
         dataIndex: newArray[i],
-        width: 35,
+        width: 5,
+        // ellipsis:true,
         sorter: (a, b) => {
           // Handle null or undefined values appropriately
           const aValue =
@@ -426,7 +428,7 @@ const closeFilterModal = () => {
 
           return aValue - bValue;
         },
-        render: (text) => <a style={{color: "#4285F4", fontWeight: 400}}>{(text === null || text === undefined ? 0 : text)}</a>,
+        render: (text) => <a style={{color: "#4285F4", fontWeight: 480}}>{(text === null || text === undefined ? 0 : text)}</a>,
         className: "customDynamicColumn",
         // selected: selectedValue,
       };
@@ -559,9 +561,13 @@ const closeFilterModal = () => {
 
   // const [state, setState]=({ columnWidth: 300})
   // const []=(10)
+ 
   const createColumns = async (columns) => {
     let columnsValue = [];
     let precolumn = [];
+
+
+
     console.log(" createColumns function call *** ")
     for (let i = 0; i < columns.length; i++) {
       //console.log("call for ", columns[i]);
@@ -656,32 +662,8 @@ const closeFilterModal = () => {
         <Col xs={8} sm={10} md={24} lg={9} xl={7}>
           {/* </Col> */}
           
-          <Button
-            type="primary"
-            icon={<FilterFilled />}
-            style={{ fontSize: 13, borderRadius: 48, width: 80 }}
-            onClick={showFilterModal}
-          >
-            Filter
-          </Button>{" "}
-          <Button
-            type="text"
-            icon={<ArrowUpOutlined />}
-            style={{ fontSize: 13 }}
-          >
-           Uplaod
-          </Button>
-          <Button
-            type="text"
-            icon={<ArrowDownOutlined />}
-            style={{ fontSize: 13 }}
-          >
-            Download
-          </Button>
-          <Button
-            type="text"
-            icon={<i class="fa-solid fa-ellipsis"></i>}
-          ></Button>
+          <FilterModal />
+
         </Col>
       </Row>
       <Row>
@@ -735,7 +717,7 @@ const closeFilterModal = () => {
                 //   type: selectionType,
                 //   ...rowSelection,
                 // }}
-                rowSelection={{...rowSelection}}
+                rowSelection={{...rowSelection,columnWidth:"2%"}}
                 columns={statecolumns}
                 // pagination={paginationConfig}
                 dataSource={statetableData}
@@ -746,6 +728,9 @@ const closeFilterModal = () => {
                 rowKey="id"
                 pagination={false}
                 className="customCss custom-table"
+                // tableLayout="auto"
+                
+               
                 // infinite
                 // onInfinite={() => fetchData()}
                 // hasMore={hasMore}
@@ -764,7 +749,6 @@ const closeFilterModal = () => {
         />
       )}
 
-<FilterModal visible={filterModalVisible} onClose={closeFilterModal} />
    
     </>
   );
