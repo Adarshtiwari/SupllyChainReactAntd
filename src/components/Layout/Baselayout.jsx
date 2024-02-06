@@ -261,13 +261,14 @@ const BaseLayout = () => {
         style={{
           background: "#F9F9FC",
           borderRight: "1px solid #ddd",
+          overflowY:"auto"
         }}
         theme="light"
       >
         <Menu
           mode="vertical"
           defaultSelectedKeys={["1"]}
-          style={{ background: "#F9F9FC" }}
+          style={{ background: "#F9F9FC" , marginTop: "1%", position: "fixed"}}
           className="sidbarMenu"
         >
           <Menu.Item
@@ -285,7 +286,8 @@ const BaseLayout = () => {
               height: 40,
               marginLeft: 10,
               paddingLeft: 10,
-              marginTop: 55,
+              marginTop: 30,
+              
             }}
         
           />
@@ -294,10 +296,12 @@ const BaseLayout = () => {
           mode="vertical"
           defaultSelectedKeys={["1"]}
           style={{
-            marginTop: 80,
+            marginTop: "10%",
             color: "#C3CAD9",
             background: "#F9F9FC",
             marginLeft: 10,
+            position: "fixed",
+            width: 63
           }}
         >
           <Menu.Item
@@ -359,17 +363,20 @@ const BaseLayout = () => {
         <Menu
           mode="vertical"
           style={{
-            marginTop: 40,
-            marginLeft: 6,
+            marginTop: "32%",
+            marginLeft: 2,
             color: "#C3CAD9",
             background: "#F9F9FC",
+            position: "fixed",
+            paddingRight:8,
+            width: 63
           }}
         >
           <Menu.Item
             key="1"
             icon={
               <div>
-                <i class="fa-regular fa-calendar-days fa-lg" style={{paddingRight:12}}></i>
+                <i class="fa-regular fa-calendar-days fa-lg" style={{paddingRight:0}}></i>
               </div>
             }
           />
@@ -377,7 +384,7 @@ const BaseLayout = () => {
             key="2"
             icon={
               <div>
-                <i class="fa-solid fa-video fa-lg" style={{paddingRight:12}}></i>
+                <i class="fa-solid fa-video fa-lg" style={{paddingRight:0}}></i>
               </div>
             }
           />
@@ -385,7 +392,7 @@ const BaseLayout = () => {
             key="3"
             icon={
               <div>
-                <i class="fa-regular fa-file-lines fa-lg" style={{paddingRight:14}}></i>
+                <i class="fa-regular fa-file-lines fa-lg" style={{paddingRight:0}}></i>
               </div>
             }
           />
@@ -393,7 +400,7 @@ const BaseLayout = () => {
             key="4"
             icon={
               <div>
-                <i class="fa-solid fa-gear" style={{paddingRight:12}}></i>
+                <i class="fa-solid fa-gear" style={{paddingRight:0}}></i>
               </div>
             }
           />

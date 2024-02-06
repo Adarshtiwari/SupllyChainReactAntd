@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./assets/chart.css";
 import Datepick from "./datepick";
 
 // changes
 import PopupComponent from "./PopupComponent"; //popup component
 
-import { Table, Row, Col, Button, Select } from "antd";
+import { Table, Row, Col, Button, Select, Tooltip } from "antd";
 import axios from "axios";
 import Chartda from "./ChartData ";
 import "./assets/table.css";
@@ -15,6 +15,7 @@ import {
   FullscreenExitOutlined,
   FilterFilled,
   ArrowDownOutlined,
+  ArrowUpOutlined,
 } from "@ant-design/icons/lib/icons";
 import { API_URL, BaseUrl, tableMapping } from "../Constant/constant";
 import { test } from "../Constant/constant";
@@ -41,13 +42,38 @@ const App = () => {
   const [mappingId, setMappingId] = useState(null);
   const [selectrowvalue, setSelectrowValue] = useState([]);
   const [SetfilterApiData, setSetfilterApiData] = useState([]);
-
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [selectedColumnValues, setSelectedColumnValues]
    = useState({
     item:"item",
     customer:"customer",
     location:"location"
 });
+
+
+//testing 
+
+  const getWidthData = (colvalue) => {
+    colvalue=colvalue.charAt(0).toLowerCase() + colvalue.slice(1)
+  console.log(" in the column widht  ",colvalue)
+    if("item" ==colvalue || "customer"==colvalue || "location"==colvalue)
+    {
+      return "8%"
+    }
+    if(colvalue.startsWith("catt") )
+    {
+      return "10%"
+    }
+    if( colvalue.startsWith("latt"))
+    {
+      return "10%"
+    }
+    else{
+      return "10%"
+    }
+  };
+
+// *****
 
 //filter model
 
@@ -77,28 +103,33 @@ const closeFilterModal = () => {
   //get Table Data  on select
 
   const rowSelection = {
+    selectedRowKeys,
     onChange: (selectedRowKeys, selectedRows) => {
       console.log(
         `selectedRowKeys: ${selectedRowKeys}`,
         "selectedRows: ",
         selectedRows
-      );
+      );      
       setSelectedRowscheck(selectedRows);
-      setSelectedRowsKeyCheck(selectedRowKeys)
+      setSelectedRowKeys(selectedRowKeys)
+      console.log(" row slected Call ")
       //("resAPI ", setApiData(setSetfilterApiData));
     },
+  
     getCheckboxProps: (record) => ({
       disabled: record.name === "Disabled User",
       // Column configuration not to be checked
       name: record.name,
     }),
+    columnWidth: 100
   };
 
   const tableStyle = {
     backgroundColor: "#F9F9FC",
     height: "100%",
     marginBottom: 0,
-    minHeight: '100%'
+    minHeight: '100%',
+    width:"100%"
     
     // Set your desired background color
   };
@@ -120,7 +151,7 @@ const closeFilterModal = () => {
 
   const handlePlusIconClick = () => {
     setselectedheadings([]);
-    // console.log(selectedProductGroup,selectedLocation,selectedCustomerGroup)
+    console.log(" row Plus Button Click *** ")
     // Replace null values with corresponding values from columns array
     const columnsArray = ["item", "location", "customer"];
 
@@ -157,6 +188,7 @@ const closeFilterModal = () => {
 
   const closePopup = (keys) => {
     //("closeuo", keys);
+    console.log("POP CLosed ********** ")
     setSelectedColumn(keys);
     setSelectrowValue(keys);
     let temp={}
@@ -187,9 +219,9 @@ const closeFilterModal = () => {
 
   // ************** Get Table Data on Click***********
   const getColumnData = async (newValue, pre) => {
-    setSelectedRowsKeyCheck([])
-    //("new value0000", newValue, "old value ",pre,"current array  ", selectrowvalue);
- 
+   
+   console.log (" In the Get Columns ********  new value->", newValue, " old value-> ",pre,"  current Column Array->  ", selectrowvalue);
+  //  setSelectedRowKeys([])
 
     let updateColumnValue=selectrowvalue
     //("old array value ",updateColumnValue)
@@ -203,6 +235,8 @@ const closeFilterModal = () => {
 
     setSelectrowValue(updateColumnValue)
     setSelectedKeys(updateColumnValue)
+    console.log ("Updated Column Array->  ", updateColumnValue);
+ 
     getFilterData("", "", "", updateColumnValue)
     //(" in the filter data ", selectrowvalue);
     
@@ -212,8 +246,11 @@ const closeFilterModal = () => {
   const getFilterData = async (item, location, cusotmer, arrayData) => {
     const selectedValuesArray = Object.values(selectedColumnValues);
     setLoading(true);
-    setSelectedRowsKeyCheck([''])
-    //("Current selected values:", selectedValuesArray);
+   
+    console.log(" Get Filter Call *** ")
+    // ajax request after empty completing
+
+    // console.log("Current selected values in filterData Array", arrayData);
     //("Adarsh Response  arrayData", arrayData.length);
     if (arrayData.length > 0) {
       let query = "";
@@ -235,7 +272,13 @@ const closeFilterModal = () => {
       const response = await axios.get(url);
      
       //("Adarsh Response", response);
-      setresultApiData(response.data.results);
+      await setTimeout(() => {
+        setSelectedRowKeys([]);
+        // setLoading(false);
+        setSelectedRowscheck([])
+        setresultApiData(response.data.results);
+      }, 2000);
+     
       setSetfilterApiData(response.data.results);
       let column = await tableData(response.data.results, arrayData);
      
@@ -293,15 +336,15 @@ const closeFilterModal = () => {
           "customer",
           "location",
         ]);
-
-        console.log("Table Data PrePared For First API Call ", column);
+  
+     
         setLoading(false);
         setcolumns(column.precolumns);
         setStatetableData(column.tableData);
         //console.log(" 100", statecolumns);
         //console.log(" 101", statetableData);
-
-        //console.log(" the result data final,", response);
+  
+        console.log(" table data aagya,", column.tableData);
         setApiData(response.data);
         setresultApiData(response.data.results);
         // onChartData()
@@ -312,6 +355,7 @@ const closeFilterModal = () => {
 
     fetchData();
   }, []);
+
 
   /*********** */
 
@@ -339,7 +383,7 @@ const closeFilterModal = () => {
       )
       .filter((date) => !isNaN(date)) // Filter out invalid dates
       .sort((a, b) => a - b);
-
+      console.log(" Table Data function call *** ")
     let newArray = [];
     sortedDates.forEach((element) => {
       const dateObject = new Date(element);
@@ -361,7 +405,7 @@ const closeFilterModal = () => {
     });
 
     let precolumn = [];
-    //console.log("mydata orignal keys ", keys);
+  
     precolumn = await createColumns(keys);
     //console.log("mydata orignal after call ", precolumn);
     //console.log("newArray", newArray);
@@ -369,7 +413,8 @@ const closeFilterModal = () => {
       let temp = {
         title: newArray[i],
         dataIndex: newArray[i],
-        width: 80,
+        width: 5,
+        // ellipsis:true,
         sorter: (a, b) => {
           // Handle null or undefined values appropriately
           const aValue =
@@ -383,7 +428,7 @@ const closeFilterModal = () => {
 
           return aValue - bValue;
         },
-        render: (text) => <a style={{color: "#4285F4", fontWeight: 400}}>{(text === null || text === undefined ? 0 : text)}</a>,
+        render: (text) => <a style={{color: "#4285F4", fontWeight: 480}}>{(text === null || text === undefined ? 0 : text)}</a>,
         className: "customDynamicColumn",
         // selected: selectedValue,
       };
@@ -405,7 +450,8 @@ const closeFilterModal = () => {
   };
 
   const createtableData = (resutlAPI, keys) => {
-    //console.log("keys ", keys);
+    console.log("create table Data Call ", keys);
+    
     let tableData = new Map();
     resutlAPI.forEach((ele) => {
       let combinationKey = "";
@@ -447,10 +493,11 @@ const closeFilterModal = () => {
 
   const getColumnSubData = async (find) => {
     try {
+      console.log(" getColumnSubData function call *** ",find)
       const response = await axios.get(
         "https://horizon-app.onrender.com/api/config"
       );
-      console.log(" in subcolumn find value ", find);
+      console.log(" in subcolumn find value ", find," get Data Response From Config File", response);
       let subColumns = [];
       let temp1;
       let substring = "";
@@ -472,7 +519,7 @@ const closeFilterModal = () => {
         filterData = response.data.mapping_table_names[key];
         //console.log("mapping template", filterData);
         temp1 = {
-          value: find,
+          value: find.charAt(0).toLowerCase() + find.slice(1),
           label: find,
         };
       }
@@ -489,7 +536,7 @@ const closeFilterModal = () => {
 
             substring = find.slice(0, -1);
             temp1 = {
-              value: columns[i],
+              value: columns[i].charAt(0).toLowerCase() + columns[i].slice(1),
               label: columns[i],
             };
             break;
@@ -512,17 +559,25 @@ const closeFilterModal = () => {
     } catch (error) {}
   };
 
+  // const [state, setState]=({ columnWidth: 300})
+  // const []=(10)
+ 
   const createColumns = async (columns) => {
     let columnsValue = [];
     let precolumn = [];
 
+
+
+    console.log(" createColumns function call *** ")
     for (let i = 0; i < columns.length; i++) {
       //console.log("call for ", columns[i]);
       columnsValue.push(await getColumnSubData(columns[i]));
     }
-    //console.log(" get subcolumn ", columnsValue);
+    console.log("  getColumnSubData function call 1111 ", columnsValue);
     let setcolumnValue = selectrowvalue;
     for (let i = 0; i < columns.length; i++) {
+
+    const getWidth=getWidthData(columns[i])
       if (setcolumnValue.length > 0) {
         if (setcolumnValue.includes(columns[i])) {
           setcolumnValue = setcolumnValue.filter((item) => item == columns[i]);
@@ -534,8 +589,10 @@ const closeFilterModal = () => {
       }
       let temp = {
         title: () => {
+          const selectedOption = columnsValue[i].find((option) => option.value === columns[i]);
+
           return (
-            <Select
+           <Select
               defaultValue={columns[i]}
               suffixIcon={<i class="fa-solid fa-caret-down"></i>}
               onChange={(e) => {
@@ -546,7 +603,7 @@ const closeFilterModal = () => {
                 maxWidth: "180px", // Set your desired height
                 minWidth: "150px",
                 overflowY: "auto",
-                fontSize: '12px',
+                fontSize: '5px',
               }}
               style={{
                 paddingLeft: "5px",
@@ -560,14 +617,17 @@ const closeFilterModal = () => {
               className="fixedDropdownTable"
               variant="borderless"
               options={columnsValue[i]}
-              // value={selectedValue}
+          
+              // value={columnsValue[i]}
             />
+               
           );
         },
         dataIndex: columns[i],
-        width: 100,
+        width: getWidth,
         fixed: "left",
         align: "left",
+      
         // sorter: true,
         // sorter: {
         //   compare: (a, b) => a.location - b.location,
@@ -575,7 +635,7 @@ const closeFilterModal = () => {
         // },
         // ellipsis: true
       };
-
+      console.log("  getColumnSubData function call 2222 ", columnsValue);
       //console.log(" pre");
       precolumn.push(temp);
     }
@@ -595,39 +655,15 @@ const closeFilterModal = () => {
     <>
       <Row style={{ paddingLeft: "15px" }}>
         {/* <Col xs={22} sm={22} md={22} lg={22} xl={22}> */}{" "}
-        <Col xs={16} sm={14} md={24} lg={15} xl={16}>
+        <Col xs={16} sm={14} md={24} lg={15} xl={17}>
           {" "}
           <Datepick />
         </Col>
-        <Col xs={8} sm={10} md={24} lg={9} xl={8}>
+        <Col xs={8} sm={10} md={24} lg={9} xl={7}>
           {/* </Col> */}
           
-          <Button
-            type="primary"
-            icon={<FilterFilled />}
-            style={{ fontSize: 13, borderRadius: 48, width: 80 }}
-            onClick={showFilterModal}
-          >
-            Filter
-          </Button>{" "}
-          <Button
-            type="text"
-            icon={<i class="fa-solid fa-arrows-rotate"></i>}
-            style={{ fontSize: 13 }}
-          >
-            Refresh Data
-          </Button>
-          <Button
-            type="text"
-            icon={<ArrowDownOutlined />}
-            style={{ fontSize: 13 }}
-          >
-            Download Data
-          </Button>
-          <Button
-            type="text"
-            icon={<i class="fa-solid fa-ellipsis"></i>}
-          ></Button>
+          <FilterModal />
+
         </Col>
       </Row>
       <Row>
@@ -642,7 +678,9 @@ const closeFilterModal = () => {
                 selectedAllColumnData={selectedColumnValues}
               />
             )}
-            {console.log("******", selectedRowscheck)}
+            {
+            // console.log("******", selectedRowscheck)
+            }
           </div>
         </Col>
       </Row>
@@ -675,10 +713,11 @@ const closeFilterModal = () => {
             <Col xs={23} sm={23} md={23} lg={23} xl={23} style={{height: "100%",}}>
               <Table
                 loading={loading}
-                rowSelection={{
-                  type: selectionType,
-                  ...rowSelection,
-                }}
+                // rowSelection={{
+                //   type: selectionType,
+                //   ...rowSelection,
+                // }}
+                rowSelection={{...rowSelection,columnWidth:"2%"}}
                 columns={statecolumns}
                 // pagination={paginationConfig}
                 dataSource={statetableData}
@@ -689,6 +728,9 @@ const closeFilterModal = () => {
                 rowKey="id"
                 pagination={false}
                 className="customCss custom-table"
+                // tableLayout="auto"
+                
+               
                 // infinite
                 // onInfinite={() => fetchData()}
                 // hasMore={hasMore}
@@ -707,7 +749,6 @@ const closeFilterModal = () => {
         />
       )}
 
-<FilterModal visible={filterModalVisible} onClose={closeFilterModal} />
    
     </>
   );
