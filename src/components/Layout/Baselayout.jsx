@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import image from "../assets/img/siren.png";
 import image2 from "../assets/img/icon2.png";
 import image3 from "../assets/img/inc_icon.png";
@@ -15,9 +15,11 @@ import { Breadcrumb, Layout, Menu, theme } from "antd";
 import HeaderComponent from "./Header/HeaderComponent";
 import Table from "../table";
 import "../../css/sidebar.css";
+import "../../css/baselayout.css";
 import firsticon from "../assets/img/siren.png";
 
 const { Header, Content, Footer, Sider } = Layout;
+
 function getItem(label, key, icon, children) {
   return {
     key,
@@ -238,14 +240,25 @@ const items = [
 const menuItemStyle = {
   background: "#ffffff",
   borderRadius: 40,
-  width: 36,
-  height: 36,
-  boxShadow: "rgba(0, 0, 0, 0.24) 0px 1px 4px",
-  paddingLeft: 8,
-  marginBottom: 10,
+  // width: 36,
+  // height: 36,
+  // boxShadow: "rgba(0, 0, 0, 0.24) 0px 1px 4px",
+  // paddingLeft: 6,
+  // marginBottom: 10,
 };
+
 const BaseLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  useEffect(() => {
+    console.log(" base loyout call ");
+  }, []);
+
+  const smallScreenStyle = {
+    fontSize: "14px",
+    backgroundColor: "red",
+  };
+
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -258,16 +271,24 @@ const BaseLayout = () => {
     >
       <Sider
         width={65}
+        className="mainsidebar"
         style={{
           background: "#F9F9FC",
-          borderRight: "1px solid #ddd",
+          // borderRight: "1px solid #ddd",
+          // overflowY:"auto"
         }}
         theme="light"
       >
         <Menu
           mode="vertical"
           defaultSelectedKeys={["1"]}
-          style={{ background: "#F9F9FC" }}
+          style={{
+            background: "#F9F9FC",
+            marginTop: "1%",
+            position: "fixed",
+            width: 60,
+            border: "none",
+          }}
           className="sidbarMenu"
         >
           <Menu.Item
@@ -285,149 +306,150 @@ const BaseLayout = () => {
               height: 40,
               marginLeft: 10,
               paddingLeft: 10,
-              marginTop: 55,
+              marginTop: 30,
             }}
-        
           />
         </Menu>
         <Menu
           mode="vertical"
           defaultSelectedKeys={["1"]}
-          style={{
-            marginTop: 80,
-            color: "#C3CAD9",
-            background: "#F9F9FC",
-            marginLeft: 10,
-          }}
+          className="secondmenu"
         >
           <Menu.Item
             key="1"
             icon={
               <div>
-                <i class="fa-solid fa-house fa-lg"style={{paddingRight:9}}></i>
+                <i
+                  class="fa-solid fa-house fa-lg"
+                  style={{ paddingRight: 10, width: 44 }}
+                ></i>
               </div>
             }
-            style={menuItemStyle}
-            // title="adarsh"
+            style={{ menuItemStyle }}
+            className="menuItemStylemainmiddle"
           />
           <Menu.Item
             key="2"
             icon={
               <div>
-                <i class="fa-solid fa-sack-dollar fa-lg" style={{paddingRight:12}}></i>
+                <i
+                  class="fa-solid fa-sack-dollar fa-lg"
+                  style={{ paddingRight: 12, width: 44 }}
+                ></i>
               </div>
             }
-            style={menuItemStyle}
+            className="menuItemStylemainmiddle"
           />
           <Menu.Item
             key="3"
             icon={
               <div>
-                <i class="fa-solid fa-magnifying-glass fa-lg" style={{paddingRight:12}}></i>
+                <i
+                  class="fa-solid fa-magnifying-glass fa-lg"
+                  style={{ paddingRight: 12, width: 44 }}
+                ></i>
               </div>
             }
-            style={menuItemStyle}
+            className="menuItemStylemainmiddle"
           />
           <Menu.Item
             key="4"
             icon={
               <div>
-                <i class="fa-solid fa-earth-americas fa-lg" style={{paddingRight:12}}></i>
+                <i
+                  class="fa-solid fa-earth-americas fa-lg"
+                  style={{ paddingRight: 12, width: 44 }}
+                ></i>
               </div>
             }
-            style={menuItemStyle}
+            className="menuItemStylemainmiddle"
           />
           <Menu.Item
             key="5"
             icon={
               <div>
-                <i class="fa-solid fa-chart-simple fa-lg" style={{paddingRight:12}}></i>
+                <i
+                  class="fa-solid fa-chart-simple fa-lg"
+                  style={{ paddingRight: 12, width: 44 }}
+                ></i>
               </div>
             }
-            style={menuItemStyle}
+            className="menuItemStylemainmiddle"
           />
           <Menu.Item
             key="6"
             icon={
               <div>
-                <i class="fa-solid fa-truck fa-lg" style={{paddingRight:12}}></i>
+                <i
+                  class="fa-solid fa-truck fa-lg"
+                  style={{ paddingRight: 7, width: 44 }}
+                ></i>
               </div>
             }
-            style={menuItemStyle}
+            className="menuItemStylemainmiddle"
           />
         </Menu>
-        <Menu
-          mode="vertical"
-          style={{
-            marginTop: 40,
-            marginLeft: 6,
-            color: "#C3CAD9",
-            background: "#F9F9FC",
-          }}
-        >
+        <Menu mode="vertical" className="lastmenu">
           <Menu.Item
             key="1"
             icon={
               <div>
-                <i class="fa-regular fa-calendar-days fa-lg" style={{paddingRight:12}}></i>
+                <i
+                  class="fa-regular fa-calendar-days fa-xl"
+                  style={{ marginLeft: 10, width: 20 }}
+                ></i>
               </div>
             }
+            className="lastmenuitem"
           />
           <Menu.Item
             key="2"
             icon={
               <div>
-                <i class="fa-solid fa-video fa-lg" style={{paddingRight:12}}></i>
+                <i
+                  class="fa-solid fa-video fa-lg"
+                  style={{ marginLeft: 10, width: 20 }}
+                ></i>
               </div>
             }
+            className="lastmenuitem"
           />
           <Menu.Item
             key="3"
             icon={
               <div>
-                <i class="fa-regular fa-file-lines fa-lg" style={{paddingRight:14}}></i>
+                <i
+                  class="fa-regular fa-file-lines fa-lg"
+                  style={{ marginLeft: 10, width: 0 }}
+                ></i>
               </div>
             }
+            className="lastmenuitem"
           />
           <Menu.Item
             key="4"
             icon={
               <div>
-                <i class="fa-solid fa-gear" style={{paddingRight:12}}></i>
+                <i
+                  class="fa-solid fa-gear"
+                  style={{ paddingRight: 2, marginLeft: 6, width: 30 }}
+                ></i>
               </div>
             }
+            className="lastmenuitem"
           />
         </Menu>
       </Sider>
-      <Layout style={{ height: "100%", background: "#F9F9FC" }}>
+
+      <Layout style={{ height: "100%", background: "#F9F9FC", }}>
         <Header
-          style={{
-            padding: 0,
-            background: "#F9F9FC",
-            height: 104,
-            borderBottom: "1px solid #ddd",
-          }}
+          className="headerclass"
         >
           <HeaderComponent navClose={collapsed} />
         </Header>
         <Content
-          style={{
-            paddingTop: "15px",
-            margin: "5px",
-            // marginTop:"40px"
-          }}
+         className="content"
         >
-          {/* <div
-            style={{
-            //   padding: 24,
-              minHeight: "100%",
-              background: colorBgContainer,
-              borderRadius: borderRadiusLG,
-            }}
-          >
-            Bill is a cat.
-          </div> */}
-
           <Table />
         </Content>
       </Layout>
