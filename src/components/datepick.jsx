@@ -9,7 +9,7 @@ const { Text } = Typography;
 const dateFormat = 'YYYY-MM-DD';
 const originalFormat = 'DD/MM/YY';
 const targetFormat = 'DD/MM/YYYY';
-function Datepick({startDate,endDate,setDataType}) {
+function Datepick({startDate,endDate}) {
   const initialStartDate = new Date();
   const initialEndDate = new Date();
   const [selectestartdDate, setSelectedStartDate] = useState("");
@@ -53,7 +53,7 @@ function Datepick({startDate,endDate,setDataType}) {
 
   const handleSelectChange = (value) => {
     // Update state with the selected value
-    setDataType(value);
+    // setData(value);
   };
 
   return (
@@ -69,7 +69,7 @@ function Datepick({startDate,endDate,setDataType}) {
         {" "}
         showing for{" "}
       </Text>
-      {/* {getdate && (    */}
+      {getdate && (   
         
       <DatePicker
         onChange={onChange}
@@ -90,13 +90,13 @@ function Datepick({startDate,endDate,setDataType}) {
         }}
         className="custom-class"
       ></DatePicker>
-      {/* // )} */}
+     )} 
    
       <Text strong style={{ fontSize: 12 }}>
         {""} to{" "}
       </Text>
-      {/* {getdate && */}
-       {/* (  */}
+      {getdate &&
+        (  
         <DatePicker
         onChange={onChange}
         format="DD/MM/YY"
@@ -111,7 +111,7 @@ function Datepick({startDate,endDate,setDataType}) {
           fontSize:12
         }}
       ></DatePicker>
-      {/* // )} */}
+      )}
       <Text strong style={{ fontSize: 12 }}>
         {""} by{" "}
       </Text>

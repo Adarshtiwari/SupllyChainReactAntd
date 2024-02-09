@@ -142,7 +142,7 @@ const App = () => {
         }`
       );
       const response = await axios.get(
-        `https://horizon-app.onrender.com/api/forecastmains/?fields=item,customer,location,sdate,fdate`
+        `https://horizon-app.onrender.com/api/forecastmains/?fields=item,customer,location,sdate,fdate&ordering=item,customer,location,sdate,fdate`
       );
 
       console.log(" the response ", response);
