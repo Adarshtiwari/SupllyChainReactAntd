@@ -3,7 +3,6 @@ import { DatePicker, Flex, Select, Typography } from "antd";
 // import moment from 'moment';
 import moment from 'moment';
 import dayjs from 'dayjs';
-import 'moment/locale/en-au';
 
 const { Text } = Typography;
 const dateFormat = 'YYYY-MM-DD';
