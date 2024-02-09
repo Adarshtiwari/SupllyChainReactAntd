@@ -75,7 +75,7 @@
 
 .chartBox{
   position: absolute;
-  width: 100%;
+  width: 99%;
   height: 100%;
   display: flex;
   justify-content: center;
@@ -84,6 +84,25 @@
 .chartBox #chartstr{
   width:  content-box;;
   display: block;
+}
+
+@media screen  and (min-width: 1023px)  and (max-width: 1290px) {
+
+  .chartBox{
+    width: 98.5%;
+  }
+
+}
+@media screen  and (min-width: 819px)  and (max-width: 1181px) {
+  .chartBox{
+    width: 96.5%;
+  }
+}
+
+@media screen  and (min-width: 765px)  and (max-width: 1022px) {
+  .chartBox{
+    width: 95.5%;
+  }
 }
 
 /* .chartBox {
