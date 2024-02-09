@@ -271,16 +271,16 @@ const FilterModal = ({ visible, onClose }) => {
   return (
     <>
       <Popover placement="bottom" title="Filters" style={{ fontSize: 17 }} trigger="click" content={content}>
-        <Button type="primary" icon={<FilterFilled />} style={{ fontSize: 13, borderRadius: 48, width: 80 }}>
+        <Button type="primary" icon={<FilterFilled />} style={{paddingLeft:0, fontSize: 13, borderRadius: 48, width: 80 }}>
           Filter
         </Button>{" "}
       </Popover>
 
-      <Button type="text" icon={<i class="fa-solid fa-arrows-rotate"></i>} style={{ fontSize: 13 }}>
-        Refresh Data
+      <Button type="text" icon={<i class="fa-solid fa-arrows-rotate"  ></i>} style={{ fontSize: 13,width:80 }}>
+        Upload
       </Button>
-      <Button type="text" icon={<ArrowDownOutlined />} style={{ fontSize: 13 }}>
-        Download Data
+      <Button type="text" icon={<ArrowDownOutlined />} style={{ marginRight:0,fontSize: 13 }}>
+        Download
       </Button>
       <Button type="text" icon={<i class="fa-solid fa-ellipsis"></i>}></Button>
     </>

@@ -1,10 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DatePicker, Flex, Select, Typography } from "antd";
-const { Text } = Typography;
+// import moment from 'moment';
+import moment from 'moment';
+import dayjs from 'dayjs';
+import 'moment/locale/en-au';
 
-function Datepick() {
+const { Text } = Typography;
+const dateFormat = 'YYYY-MM-DD';
+const originalFormat = 'DD/MM/YY';
+const targetFormat = 'DD/MM/YYYY';
+function Datepick({startDate,endDate,setDataType}) {
   const initialStartDate = new Date();
   const initialEndDate = new Date();
+  const [selectestartdDate, setSelectedStartDate] = useState("");
+  const [selecteenddDate, setSelectedEndDate] = useState("");
+  const [getdate,SetgetDate]=useState(false)
   initialEndDate.setMonth(initialEndDate.getMonth() + 1);
 
   const formatDate = (date) => {
@@ -21,8 +31,36 @@ function Datepick() {
     console.log(date, dateString);
   };
 
+  useEffect(()=>{
+    // initialEndDate=startDate
+    // setSelectedStartDate(startDate);
+    SetgetDate(false)
+    setTimeout(()=>{
+    
+      const originalDate = '27/07/18';
+    
+      
+      const convertedDate = dayjs(startDate, originalFormat).format(targetFormat);
+      const convertedEndDate = dayjs(endDate, originalFormat).format(targetFormat);
+            setSelectedStartDate(convertedDate);
+            setSelectedEndDate(convertedEndDate)
+            SetgetDate(true)
+            console.log("start , end  data  after timeout ",selectestartdDate,selecteenddDate)
+      },2000)
+  
+    console.log("start , end  data ",selectestartdDate,selecteenddDate)
+  },[startDate, endDate])
+
+  const handleSelectChange = (value) => {
+    // Update state with the selected value
+    setDataType(value);
+  };
+
   return (
+   
     <div>
+      
+ 
       <Text strong style={{ fontSize: 16 }}>
         {" "}
         Current Plan
@@ -31,9 +69,15 @@ function Datepick() {
         {" "}
         showing for{" "}
       </Text>
+      {/* {getdate && (    */}
+        
       <DatePicker
         onChange={onChange}
-        format="DD/MM/YYYY"
+        format="DD/MM/YY"
+  
+        // value={startDate && dayjs(startDate,dateFormat)}
+        defaultValue={dayjs(selectestartdDate, targetFormat)} 
+        // format={dateFormat
         suffixIcon={<i class="fa-solid fa-caret-down"></i>}
         placeholder="Start Date"
         style={{
@@ -46,12 +90,17 @@ function Datepick() {
         }}
         className="custom-class"
       ></DatePicker>
+      {/* // )} */}
+   
       <Text strong style={{ fontSize: 12 }}>
         {""} to{" "}
       </Text>
-      <DatePicker
+      {/* {getdate && */}
+       {/* (  */}
+        <DatePicker
         onChange={onChange}
-        format="DD/MM/YYYY"
+        format="DD/MM/YY"
+        defaultValue={dayjs(selecteenddDate, targetFormat)} 
         suffixIcon={<i class="fa-solid fa-caret-down"></i>}
         placeholder="End Date"
         style={{
@@ -62,6 +111,7 @@ function Datepick() {
           fontSize:12
         }}
       ></DatePicker>
+      {/* // )} */}
       <Text strong style={{ fontSize: 12 }}>
         {""} by{" "}
       </Text>
@@ -70,6 +120,7 @@ function Datepick() {
           borderRadius: 30,
           width: 120
         }}
+        onChange={handleSelectChange}
         defaultValue="Monthly View"
         placeholder="Select View"
         className="custom-select"

@@ -84,3 +84,167 @@ export const test= [
         "f_quantity_user_disc": 0,
         "t_id": 0
     }]
+
+
+
+export const demotabledata=[
+    {
+        "location": "86316",
+        "customer": "185481",
+        "item": "63710000",
+        "sqty": null,
+        "sdate": null,
+        "fdate": "2024-10-13T18:30:00Z",
+        "f_quantity_engine": 160,
+        "f_quantity_user": 160,
+        "id": 490,
+        "sum_sqty": null,
+        "01/01/70": 0
+    },
+    {
+        "location": "86300",
+        "customer": "185223",
+        "item": "63710003",
+        "sqty": null,
+        "sdate": null,
+        "fdate": "2024-01-07T18:30:00Z",
+        "f_quantity_engine": 439,
+        "f_quantity_user": 439,
+        "id": 502,
+        "sum_sqty": null,
+        "01/01/70": 0
+    }
+    ,
+    {
+        "location": "86316",
+        "customer": "185481",
+        "item": "63710000",
+        "sqty": null,
+        "sdate": null,
+        "fdate": "2024-10-13T18:30:00Z",
+        "f_quantity_engine": 160,
+        "f_quantity_user": 160,
+        "id": 490,
+        "sum_sqty": null,
+        "01/01/70": 0
+    },
+    {
+        "location": "86300",
+        "customer": "185223",
+        "item": "63710003",
+        "sqty": null,
+        "sdate": null,
+        "fdate": "2024-01-07T18:30:00Z",
+        "f_quantity_engine": 439,
+        "f_quantity_user": 439,
+        "id": 502,
+        "sum_sqty": null,
+        "01/01/70": 0
+    },
+    {
+        "location": "86316",
+        "customer": "185481",
+        "item": "63710000",
+        "sqty": null,
+        "sdate": null,
+        "fdate": "2024-10-13T18:30:00Z",
+        "f_quantity_engine": 160,
+        "f_quantity_user": 160,
+        "id": 490,
+        "sum_sqty": null,
+        "01/01/70": 0
+    },
+    {
+        "location": "86300",
+        "customer": "185223",
+        "item": "63710003",
+        "sqty": null,
+        "sdate": null,
+        "fdate": "2024-01-07T18:30:00Z",
+        "f_quantity_engine": 439,
+        "f_quantity_user": 439,
+        "id": 502,
+        "sum_sqty": null,
+        "01/01/70": 0
+    },
+    {
+        "location": "86316",
+        "customer": "185481",
+        "item": "63710000",
+        "sqty": null,
+        "sdate": null,
+        "fdate": "2024-10-13T18:30:00Z",
+        "f_quantity_engine": 160,
+        "f_quantity_user": 160,
+        "id": 490,
+        "sum_sqty": null,
+        "01/01/70": 0
+    },
+    {
+        "location": "86300",
+        "customer": "185223",
+        "item": "63710003",
+        "sqty": null,
+        "sdate": null,
+        "fdate": "2024-01-07T18:30:00Z",
+        "f_quantity_engine": 439,
+        "f_quantity_user": 439,
+        "id": 502,
+        "sum_sqty": null,
+        "01/01/70": 0
+    },
+    {
+        "location": "86316",
+        "customer": "185481",
+        "item": "63710000",
+        "sqty": null,
+        "sdate": null,
+        "fdate": "2024-10-13T18:30:00Z",
+        "f_quantity_engine": 160,
+        "f_quantity_user": 160,
+        "id": 490,
+        "sum_sqty": null,
+        "01/01/70": 0
+    },
+    {
+        "location": "86300",
+        "customer": "185223",
+        "item": "63710003",
+        "sqty": null,
+        "sdate": null,
+        "fdate": "2024-01-07T18:30:00Z",
+        "f_quantity_engine": 439,
+        "f_quantity_user": 439,
+        "id": 502,
+        "sum_sqty": null,
+        "01/01/70": 0
+    },
+    {
+        "location": "86316",
+        "customer": "185481",
+        "item": "63710000",
+        "sqty": null,
+        "sdate": null,
+        "fdate": "2024-10-13T18:30:00Z",
+        "f_quantity_engine": 160,
+        "f_quantity_user": 160,
+        "id": 490,
+        "sum_sqty": null,
+        "01/01/70": 0
+    },
+    {
+        "location": "86300",
+        "customer": "185223",
+        "item": "63710003",
+        "sqty": null,
+        "sdate": null,
+        "fdate": "2024-01-07T18:30:00Z",
+        "f_quantity_engine": 439,
+        "f_quantity_user": 439,
+        "id": 502,
+        "sum_sqty": null,
+        "01/01/70": 0
+    }
+]
+
+const BaseUrlforfirstcall="https://horizon-app.onrender.com/api/forecastmains/?fields=item,customer,location,sdate,fdate,f_quantity_engine,f_quantity_user&ordering=item,customer,location,sdate"

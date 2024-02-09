@@ -48,6 +48,100 @@
     padding-right:6
 }
 
+.custom-menu{
+    margin-top:10%;
+    color: #C3CAD9;
+    background: #F9F9FC;
+    margin-left: 2;
+    margin-right: 7;
+    position: fixed;
+    border:none;
+    width: 50
+  }
+
+  .custom-menu .menuItemStyle{
+    background: #ffffff;
+    border-radius: 40;
+    width: 36;
+    height: 36;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 1px 4px;
+    padding-left: 6;
+
+    margin-bottom: 10;
+  }
+  .mainsidebar
+  {
+    /* background: #F9F9FC;
+     */
+     background: rgb(195, 202, 217);;
+    border-right: 1px solid #ddd;
+    overflow-y: "auto" !important;
+  }
+
+  :where(.css-dev-only-do-not-override-1b0bdye).ant-menu-vertical >.ant-menu-item{
+    border-radius: 40px !important;
+    width: 30 !important;
+    /* box-shadow: rgba(0, 0, 0, 0.24) 0px 1px 4px; */
+
+  }
+
+  .menuItemStylemainmiddle{
+    /* background: #ffffff; */
+    background: #F9F9FC;
+    width: 30;
+    height: 30;
+    padding-left: 6;
+    margin-bottom: 10;
+
+  }
+
+  .secondmenu{
+  
+        margin-top: 10%;
+        color: #C3CAD9;
+        background: #F9F9FC;
+        margin-left: 4;
+        margin-right:7;
+        position: fixed;
+        border:none;
+        width: 65px;
+      
+  }
+
+  .lastmenu
+  {
+    bottom: 2%;
+    margin-left: 2;
+    color: #C3CAD9;
+    background: #F9F9FC;
+    position: fixed;
+    padding-right:8;
+    border:none;
+    width: 65px;
+  }
+
+  .lastmenuitem{
+    background: #F9F9FC;
+    /* border-radius: 40; */
+    width: 30;
+    height: 36;
+    /* box-shadow: rgba(0, 0, 0, 0.24) 0px 1px 4px; */
+    padding-left: 5;
+    margin-bottom: 10;
+  }
+  .lastmenuitmeicon{
+    padding-right:9;
+    width: 44
+  }
+
+@media screen and (min-width: 1200px) {
+
+    .topSideNav {
+        padding: 10px;
+    }
+  
+}
+
 /* .sidbarMenu .antd-menu-item{
     margin-bottom: 8px !important;
 } */
