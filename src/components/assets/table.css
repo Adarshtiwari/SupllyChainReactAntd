@@ -76,13 +76,13 @@
     border: 1px solid #ddd
   }
 
-  @media screen and (max-width: 1029px) {
+  @media screen and (min-width: 1023px)and (max-width: 1029px) {
 
     .filterdata{
       left: 10%;
     }
     .card-body-2{
-      height: 20px !important;
+      height: 190px !important;
       /* background-color: black; */
        }
   
