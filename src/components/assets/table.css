@@ -52,7 +52,9 @@
 
   .filterdata{
     width: 100%;
-    left: 14%;
+    right: 2%;
+    margin: 0;
+    padding: 0;
   }
   .card-body-2{
     -webkit-box-align: center !important;
@@ -103,10 +105,10 @@
       padding-left: 13px !important;
      }
   }
-  @media screen  and (min-width: 819px)  and (max-width: 1181px) {
+  @media screen  and (min-width: 819px)  and (max-width: 822px) {
 
     .filterdata{
-      left: 7%;
+      right: .5%;
     }
     .card-body-2{
    height: 200px !important;
@@ -123,10 +125,19 @@
   
   }
 
-  @media screen  and (min-width: 1023px)  and (max-width: 1290px) {
+
+
+/* Ipad screen  */
+  @media screen  and (min-width: 1023px)  and (max-width: 1026px) {
 
     .filterdata{
-      left: 2%;
+      right: 1%;
+    }
+  }
+  @media screen  and (min-width: 1028px)  and (max-width: 1290px) {
+
+    .filterdata{
+      right: .3%;
     }
     .card-body-2{
    height: 200px !important;

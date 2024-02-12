@@ -320,8 +320,8 @@ const BaseLayout = () => {
             icon={
               <div>
                 <i
-                  class="fa-solid fa-house fa-lg"
-                  style={{ paddingRight: 10, width: 44 }}
+                  class="fa-solid fa-house fa-xl"
+                  style={{ marginLeft: 1, width: 10 }}
                 ></i>
               </div>
             }
@@ -333,8 +333,8 @@ const BaseLayout = () => {
             icon={
               <div>
                 <i
-                  class="fa-solid fa-sack-dollar fa-lg"
-                  style={{ paddingRight: 12, width: 44 }}
+                  class="fa-solid fa-sack-dollar fa-xl"
+                  style={{ marginLeft: 1, width: 10 }}
                 ></i>
               </div>
             }
@@ -345,8 +345,8 @@ const BaseLayout = () => {
             icon={
               <div>
                 <i
-                  class="fa-solid fa-magnifying-glass fa-lg"
-                  style={{ paddingRight: 12, width: 44 }}
+                  class="fa-solid fa-magnifying-glass fa-xl"
+                  style={{ marginLeft: 1, width: 10 }}
                 ></i>
               </div>
             }
@@ -357,8 +357,8 @@ const BaseLayout = () => {
             icon={
               <div>
                 <i
-                  class="fa-solid fa-earth-americas fa-lg"
-                  style={{ paddingRight: 12, width: 44 }}
+                  class="fa-solid fa-earth-americas fa-xl"
+                  style={{ marginLeft: 1, width: 10 }}
                 ></i>
               </div>
             }
@@ -369,8 +369,8 @@ const BaseLayout = () => {
             icon={
               <div>
                 <i
-                  class="fa-solid fa-chart-simple fa-lg"
-                  style={{ paddingRight: 12, width: 44 }}
+                  class="fa-solid fa-chart-simple fa-xl"
+                  style={{ marginLeft: 1, width: 10 }}
                 ></i>
               </div>
             }
@@ -381,8 +381,8 @@ const BaseLayout = () => {
             icon={
               <div>
                 <i
-                  class="fa-solid fa-truck fa-lg"
-                  style={{ paddingRight: 7, width: 44 }}
+                  class="fa-solid fa-truck fa-xl"
+                  style={{ marginLeft: 1, width: 10 }}
                 ></i>
               </div>
             }
@@ -396,7 +396,7 @@ const BaseLayout = () => {
               <div>
                 <i
                   class="fa-regular fa-calendar-days fa-xl"
-                  style={{ marginLeft: 10, width: 20 }}
+                  style={{ marginLeft: 2, width: 10 }}
                 ></i>
               </div>
             }
@@ -407,8 +407,8 @@ const BaseLayout = () => {
             icon={
               <div>
                 <i
-                  class="fa-solid fa-video fa-lg"
-                  style={{ marginLeft: 10, width: 20 }}
+                  class="fa-solid fa-video fa-xl"
+                  style={{ marginLeft: 2,width: 10}}
                 ></i>
               </div>
             }
@@ -419,8 +419,8 @@ const BaseLayout = () => {
             icon={
               <div>
                 <i
-                  class="fa-regular fa-file-lines fa-lg"
-                  style={{ marginLeft: 10, width: 0 }}
+                  class="fa-regular fa-file-lines fa-xl"
+                  style={{ marginLeft: 2, width: 0 }}
                 ></i>
               </div>
             }
@@ -431,8 +431,8 @@ const BaseLayout = () => {
             icon={
               <div>
                 <i
-                  class="fa-solid fa-gear"
-                  style={{ paddingRight: 2, marginLeft: 6, width: 30 }}
+                  class="fa-solid fa-gear fa-xl"
+                  style={{ paddingRight: 0, marginLeft: 2, width: 0 }}
                 ></i>
               </div>
             }

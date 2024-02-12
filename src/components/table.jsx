@@ -734,14 +734,14 @@ const App = () => {
 
   return (
     <>
-      <Row style={{ paddingLeft: "15px" }}>
+      <Row  gutter={0}>
         {/* <Col xs={22} sm={22} md={22} lg={22} xl={22}> */}{" "}
-        <Col xs={16} sm={14} md={13} lg={13} xl={17}>
+        <Col xs={16} sm={14} md={13} lg={14} xl={17} style={{ paddingLeft: "12px" }}>
           {/* {" "} */}
           {/* console.log("start date ",startDate, "endDate ",endDate); */}
           {getdate && <Datepick startDate={startDate} endDate={endDate} />}
         </Col>
-        <Col xs={8} sm={10} md={11} lg={11} xl={7} className="filterdata">
+        <Col xs={8} sm={10} md={11} lg={10} xl={7} className="filterdata">
           {/* </Col> */}
 
           <FilterModal />
