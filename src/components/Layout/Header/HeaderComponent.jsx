@@ -59,6 +59,8 @@ const HeaderComponent = (navClose) => {
       key: "planning",
       icon: <MenuOutlined style={{ padding: 0 }} />,
       className: "menuitemicon",
+  
+ 
     },
     {
       label: "Portfolios",
@@ -133,6 +135,7 @@ const HeaderComponent = (navClose) => {
             onClick={onClick}
             selectedKeys={[current]}
             items={items}
+            style={{ margin: 0 }}
             className="HeadermenuItem"
             // style={{ background: "#F9F9FC", color: "#7D8FB3", fontSize: 12 , height:40,}}
           />

@@ -97,7 +97,7 @@
 
   .secondmenu{
   
-        margin-top: 10%;
+        margin-top: 8%;
         color: #C3CAD9;
         background: #F9F9FC;
         margin-left: 4;
@@ -134,12 +134,51 @@
     width: 44
   }
 
+
+  @media screen and (min-width: 765px) and (max-width: 770px) {
+
+    .topSideNav {
+        padding: 10px;
+    }
+    .secondmenu{
+      margin-top: 20%;
+    }
+  
+  }
+
+
+  @media screen and (min-width: 815px) and (max-width: 825px) {
+
+    .topSideNav {
+        padding: 10px;
+    }
+    .secondmenu{
+      margin-top: 20%;
+    }
+  
+  }
+
+
 @media screen and (min-width: 1200px) {
 
     .topSideNav {
         padding: 10px;
     }
   
+}
+
+
+
+
+@media screen and (min-width: 1023px) and (max-width: 1025px) {
+
+  .topSideNav {
+      padding: 10px;
+  }
+  .secondmenu{
+    margin-top: 16%;
+  }
+
 }
 
 /* .sidbarMenu .antd-menu-item{

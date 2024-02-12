@@ -141,7 +141,8 @@
 
 .inputSec{
     padding: 7px;
-    margin-right: 2%;
+    /* margin-right: 2%; */
+    right: 0%;
     height: 2%;
     border-radius: 20px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -202,7 +203,7 @@
 .topSecondSec{
     position: absolute;
     bottom: 0;
-    width:65%;
+    width:70%;
     /* left: 2%; */
     display: flex;
     color: #a3b3b8;
@@ -425,10 +426,17 @@ position: sticky;
 {
     height: 51px;
     padding: 0;
+    margin-right: 0%;
 }
 .Breadcrumb{
     margin-top:6%;
     font-size: 14
+}
+
+
+/* menu Itme */
+.ant-menu-overflow-item .ant-menu-item .menuitemicon{
+    padding: 0px !important;
 }
 
 @media screen  and (min-width: 765px)  and (max-width: 1022px) {
@@ -451,16 +459,16 @@ position: sticky;
     }
   }
 
-  @media screen and (min-width: 1162px)and (max-width:1170px)  {
+  @media screen and (min-width: 1160px)and (max-width:1170px)  {
     .topSecondSec{
-        height: 59%;
-        width: 45%;
+        height: 60%;
+        width: 62%;
     }
   }
-  @media screen and (min-width: 1023px)and (min-width: 1026px)  {
+  @media screen and (min-width: 1023px)and (max-width: 1026px)  {
     .topSecondSec{
-        height: 59%;
-        width: 64%;
+        height: 56%;
+        width: 62%;
     }
   }
 
@@ -470,9 +478,14 @@ position: sticky;
         height: 59%;
         width: 59%;
     }
-  
-  
 }
+
+/* @media screen and(min-width: 1270px) {
+    .topSecondSec{
+        height: 59%;
+        width: 70%;
+    }  
+} */
 
 
 
