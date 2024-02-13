@@ -27,10 +27,10 @@
 }
 @media screen and (min-width: 819px) and (max-width: 822px) {
   .headerclass {
-    height: 70px !important;
+    height: 61px !important;
   }
   .content {
-    top: 6.3%;
+    top: 5.6%;
   }
 }
 
