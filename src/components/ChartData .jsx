@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import "./assets/chart.css";
 import Chart from "chart.js/auto"; // Import Chart.js library
 
-function ChartData({ tabledata, selectedRowscheck,slectColumnValue}) {
+function ChartData({ tabledata, selectedRowscheck,slectColumnValue,type}) {
   const [chartData, setChartData] = useState(null);
   const [selectedItem, setSelectedItem] = useState([]);
   const [selectedloc, setSelectedLoc] = useState([]);
@@ -262,7 +262,7 @@ filteredTableDataWithLocAndCus=sortedTableData
         chart.destroy();
       }
     };
-  }, [tabledata, selectedItem, selectedRowscheck]);
+  }, [tabledata, selectedItem, selectedRowscheck,type]);
 
 
  

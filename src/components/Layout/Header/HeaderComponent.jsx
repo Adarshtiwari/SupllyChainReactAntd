@@ -1,5 +1,5 @@
 import { React, useState } from "react";
-
+import {  Link } from 'react-router-dom';
 import {
   Row,
   Col,
@@ -29,7 +29,7 @@ import { Table } from "antd";
 import { useEffect } from "react";
 import "../../../css/header.css";
 import { noop } from "antd/es/_util/warning";
-const { Text, Link } = Typography;
+const { Text } = Typography;
 const { Search } = Input;
 
 const HeaderComponent = (navClose) => {
@@ -57,43 +57,48 @@ const HeaderComponent = (navClose) => {
     {
       label: "Planning Overview",
       key: "planning",
-      icon: <MenuOutlined style={{ padding: 0 }} />,
+      icon: (
+        <Link to="/planning" className="menuitemicon">
+          <MenuOutlined style={{ padding: 0 }} />
+        </Link>
+      ),
       className: "menuitemicon",
-  
- 
     },
     {
       label: "Portfolios",
       key: "portfolio",
       className: "menuitemicon",
       icon: (
+        <Link to="/Portfolio" >
         <div>
           <i class="fa-solid fa-suitcase"></i>
         </div>
+        </Link>
       ),
     },
     {
       label: " Methods",
       key: "method",
-      icon: <CalendarOutlined />,
+      icon: (<Link to="/method" > <CalendarOutlined /></Link>),
       className: "menuitemicon",
+   
     },
     {
       label: "Segments",
       key: "segment",
-      icon: <AlignCenterOutlined />,
+      icon: (<Link to="/segment" > <AlignCenterOutlined /></Link>),
       className: "menuitemicon",
     },
     {
       label: "Performance",
       key: "performance",
-      icon: <RiseOutlined />,
+      icon:(<Link to="/performace" >  <RiseOutlined /></Link>),
       className: "menuitemicon",
     },
     {
       label: "Posts",
       key: "post",
-      icon: <BuildOutlined />,
+      icon: (<Link to="/post" > <BuildOutlined /></Link>),
       className: "menuitemicon",
     },
   ];

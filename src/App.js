@@ -9,19 +9,21 @@ function App() {
     console.log("app call");
   });
   return (
-    <Router>
+
+    // <Router>
       <>
+      <BaseLayout />
         {/* <Dashboard /> */}
         {/* <Tablesample/> */}
-        <Routes>
-          <Route path="/dashboard" element={<BaseLayout />} />
+        {/* <Routes> */}
+          {/* <Route path="/dashboard" element={<BaseLayout />} /> */}
           {/* <Route path="/create-ad" element={<CreateAd />} /> */}
           {/* <Route path="/"  element={<Dashboard />} /> */}
           {/* // <Route path="/form-media-ads"  element={<Formmediaad />} /> */}
           {/* // <Route path="/form-text-ads"  element={<Formtextad />} /> */}
-        </Routes>
+        {/* </Routes> */}
       </>
-    </Router>
+    // </Router>
   );
 }
 
