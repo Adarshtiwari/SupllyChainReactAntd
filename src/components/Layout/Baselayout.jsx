@@ -17,6 +17,12 @@ import Table from "../table";
 import "../../css/sidebar.css";
 import "../../css/baselayout.css";
 import firsticon from "../assets/img/siren.png";
+import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
+import Portfolio from "../baseComponent/Portfolio";
+import Methods from "../baseComponent/Methods";
+import Segments from "../baseComponent/Segments";
+import Performance from "../baseComponent/Performance";
+import Posts from "../baseComponent/Posts";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -263,6 +269,7 @@ const BaseLayout = () => {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
   return (
+    <Router>
     <Layout
       style={{
         minHeight: "100vh",
@@ -450,10 +457,24 @@ const BaseLayout = () => {
         <Content
          className="content"
         >
-          <Table />
+          <Routes>
+             <Route path="/planning" element={<Table />} />
+             <Route path="/portfolio" element={<Portfolio />} />
+             <Route path="/method" element={<Methods />} />
+             <Route path="/segment" element={<Segments />} />
+             <Route path="/performace" element={<Performance />} />
+             <Route path="/post" element={<Posts />} />
+             </Routes>
+
+{/* Define additional routes for other components */}
+{/* Example: */}
+{/* <Route path="/dashboard" component={} /> */}
+{/* <Table/> */}
+         
         </Content>
       </Layout>
     </Layout>
+       </Router>
   );
 };
 export default BaseLayout;

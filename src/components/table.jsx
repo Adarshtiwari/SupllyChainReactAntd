@@ -25,7 +25,6 @@ import {
 import { test } from "../Constant/constant";
 import FilterModal from "./FilterModal";
 
-
 const App = () => {
   const [selectionType, setSelectionType] = useState("checkbox");
   const [apiData, setApiData] = useState([]);
@@ -66,7 +65,7 @@ const App = () => {
 
   //testing
   const [dynamicColumns, setdynamicColumns] = useState(1);
-
+ const [type,setType]=useState(["sweek","fweek"])
   const [totalwidth, settoatlwidth] = useState(0);
   const getWidthData = (colvalue) => {
     colvalue = colvalue.charAt(0).toLowerCase() + colvalue.slice(1);
@@ -132,41 +131,36 @@ const App = () => {
     }
   };
 
-  const fetchData = async (pageNumber) => {
+  const fetchData = async (pageNumber, type) => {
     try {
       const promises = [];
       setLoading(true);
-      console.log(
-        pageNumber,
-        `https://horizon-app.onrender.com/api/forecastmains/?fields=item,customer,location,sdate,fdate&ordering=item,customer,location,sdate,fdate
-        }`
-      );
-      const response = await axios.get(
-        `https://horizon-app.onrender.com/api/forecastmains/?fields=item,customer,location,sdate,fdate&ordering=item,customer,location,sdate,fdate`
+      //column Data
+      const responseColumnData = await axios.get(
+        `https://horizon-app.onrender.com/api/dates/?page=1&page_size=160`
       );
 
-      console.log(" the response ", response);
-
-      let column = await tableData(response.data.results, [
-        "item",
-        "customer",
-        "location",
-      ]);
-
-      if (startDate != null) {
-        setTimeout(() => {
-          SetgetDate(true);
-          console.log("hello");
-        }, 2000);
-      }
-      console.log(
-        " table data aagya,",
-        column.tableData,
-        "set data",
-        statetableData
+      const responseTableData = await axios.get(
+        `https://horizon-app.onrender.com/api/forecastmains/?fields=item,location,customer,sweek,fweek&page=1&page_size=20`
       );
-      setApiData(response.data);
-      setresultApiData(response.data.results);
+
+      const getValidFormateofColumnValue = await getValidFormateofColumn(
+        responseColumnData.data.results,
+        type
+      );
+
+      let column = await tableData(
+        responseTableData.data.results,
+        getValidFormateofColumnValue,
+        ["item", "customer", "location"],
+        type
+      );
+
+      console.log(" retunr column ", column);
+
+      console.log(" table data ,", column.tableData);
+      setApiData(responseTableData.data);
+      setresultApiData(responseTableData.data.results);
 
       const newRows = column.tableData;
       const prevIds = new Set(statetableData.map((row) => row.id));
@@ -180,16 +174,11 @@ const App = () => {
       // setStatetableData((prevData) => [...prevData, ...updatedData]);
       setStatetableData(updatedData);
 
-      const updatecolumn = column.precolumns.map((col, index) => ({
+      const updatecolumn = column.precolumn.map((col, index) => ({
         ...col,
         width: calculateColumnWidth(col.dataIndex || col.title),
       }));
-      console.log(
-        " columns *********",
-        column.precolumns,
-        "adarsh ---",
-        updatecolumn
-      );
+
       setcolumns(updatecolumn);
       settoatlwidth(updatecolumn.length);
       setdynamicColumns(updatecolumn);
@@ -198,12 +187,44 @@ const App = () => {
         total: column.tableData.length,
       }));
       setLoading(false);
-      setTimeout(() => {
-        console.log(" toatl settoatlwidth  ", totalwidth);
-      }, 2000);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
+  };
+
+  const getValidFormateofColumn = async (originalArray, type) => {
+    const resultObject1 = originalArray.map((obj) => {
+      // Use Object.entries to get an array of [key, value] pairs
+      const filteredEntries = Object.entries(obj).filter(
+        ([key]) => key === type[0]
+      );
+
+      // Convert the filtered entries back to an object
+      return Object.fromEntries(filteredEntries);
+    });
+
+    const resultObject2 = originalArray.map((obj) => {
+      // Use Object.entries to get an array of [key, value] pairs
+      const filteredEntries = Object.entries(obj).filter(
+        ([key]) => key === type[1]
+      );
+
+      // Convert the filtered entries back to an object
+      return Object.fromEntries(filteredEntries);
+    });
+
+    const nonNUllresultObject1 = resultObject1.filter(
+      (obj) => Object.keys(obj).length !== 0
+    );
+    const nonNUllResultObject2 = resultObject2.filter(
+      (obj) => Object.keys(obj).length !== 0
+    );
+
+    const finalResultObject = [
+      ...nonNUllresultObject1,
+      ...nonNUllResultObject2,
+    ];
+    return finalResultObject;
   };
 
   //get Table Data  on select
@@ -411,7 +432,7 @@ const App = () => {
 
   //Api Data for Table
   useEffect(() => {
-    fetchData(pagination.current);
+    fetchData(pagination.current, ["sweek", "fweek"]);
   }, []);
 
   /*********** */
@@ -432,16 +453,84 @@ const App = () => {
     return formattedDateString;
   };
 
-  const tableData = async (resutlAPI, keys) => {
-    console.log("mydata orignal after call newArray ", resutlAPI);
-    const sortedDates = resutlAPI
+  const tableData = async (
+    responseTableData,
+    responseColumnData,
+    keys,
+    type
+  ) => {
+    const responseColumnDatavalue = sortedConverToStringUniqueArray(
+      responseColumnData,
+      type
+    );
+
+    const responseTableDatavalue = sortedConverToStringUniqueArray(
+      responseTableData,
+      type
+    );
+
+    let precolumn = await createColumns(keys);
+
+    //Start Date and EnD Date
+    setTimeout(() => {
+      SetstartDate(responseColumnDatavalue[0]);
+      SetendtDate(responseColumnDatavalue[responseColumnDatavalue.length - 1]);
+      SetgetDate(true);
+    }, 2000);
+
+    for (let i = 0; i < responseColumnDatavalue.length; i++) {
+      let temp = {
+        title: responseColumnDatavalue[i],
+        dataIndex: responseColumnDatavalue[i],
+        width: "5px",
+
+        sorter: (a, b) => {
+          // Handle null or undefined values appropriately
+          const aValue =
+            a[responseColumnDatavalue[i]] === null ||
+            a[responseColumnDatavalue[i]] === undefined
+              ? 0
+              : a[responseColumnDatavalue[i]];
+          const bValue =
+            b[responseColumnDatavalue[i]] === null ||
+            b[responseColumnDatavalue[i]] === undefined
+              ? 0
+              : b[responseColumnDatavalue[i]];
+
+          return aValue - bValue;
+        },
+        render: (text) => (
+          <a style={{ color: "#4285F4", fontWeight: 480 }}>
+            {text === null || text === undefined ? 0 : text}
+          </a>
+        ),
+        className: "customDynamicColumn",
+        // selected: selectedValue,
+      };
+      precolumn.push(temp);
+    }
+
+    let tableData = await createtableData(responseTableData, keys, type);
+console.log(" table data createtableData",tableData)
+    return {
+      precolumn: precolumn,
+      tableData: tableData,
+    };
+  };
+
+  function sortedConverToStringUniqueArray(resultObject, type) {
+    //sorted Days
+    const sortedDates = resultObject
       .map((item) =>
-        item.sdate !== null ? new Date(item.sdate) : new Date(item.fdate)
+        item[type[0]] !== null
+          ? new Date(item[type[0]])
+          : new Date(item[type[1]])
       )
       .filter((date) => !isNaN(date)) // Filter out invalid dates
       .sort((a, b) => a - b);
 
-    let newArray = [];
+    //Formated Days in String
+    let sortedStringDate = [];
     sortedDates.forEach((element) => {
       const dateObject = new Date(element);
       let inputDate = element;
@@ -458,70 +547,17 @@ const App = () => {
       //console.log("formattedDateString", formattedDateString);
       element = formattedDateString;
       //console.log("element", element);
-      newArray.push(element);
+      sortedStringDate.push(element);
     });
 
-    let precolumn = [];
-   
-    newArray = [...new Set(newArray)]; // crete unique column value
-    precolumn = await createColumns(keys);
-    console.log("mydata orignal after call ", precolumn);
+    //create unique Sorted String Dates
+    sortedStringDate = [...new Set(sortedStringDate)];
 
-    for (let i = 0; i < newArray.length; i++) {
-      if (i == 0) {
-        setTimeout(() => {
-          SetstartDate(newArray[i]);
-        }, 2000);
-      }
-      if (i == newArray.length - 1) {
-        setTimeout(() => {
-          SetgetDate(true);
-          SetendtDate(newArray[i]);
-        }, 2000);
-      }
-      let temp = {
-        title: newArray[i],
-        dataIndex: newArray[i],
-        width: "5px",
+    return sortedStringDate;
+  }
 
-        sorter: (a, b) => {
-          // Handle null or undefined values appropriately
-          const aValue =
-            a[newArray[i]] === null || a[newArray[i]] === undefined
-              ? 0
-              : a[newArray[i]];
-          const bValue =
-            b[newArray[i]] === null || b[newArray[i]] === undefined
-              ? 0
-              : b[newArray[i]];
-
-          return aValue - bValue;
-        },
-        render: (text) => (
-          <a style={{ color: "#4285F4", fontWeight: 480 }}>
-            {text === null || text === undefined ? 0 : text}
-          </a>
-        ),
-        className: "customDynamicColumn",
-        // selected: selectedValue,
-      };
-      precolumn.push(temp);
-    }
-
-    let tableData = await createtableData(resutlAPI, keys);
-
-    console.log(" table data ", tableData);
-    let sentData = {
-      precolumns: precolumn,
-      tableData: tableData,
-    };
-
-    return sentData;
-  };
-
-  const createtableData = (resutlAPI, keys) => {
-    console.log("create table Data Call ", resutlAPI);
-
+  const createtableData = (resutlAPI, keys, type) => {
+    //
     let tableData = new Map();
     resutlAPI.forEach((ele) => {
       let combinationKey = "";
@@ -536,21 +572,21 @@ const App = () => {
       if (tableData.has(combinationKey)) {
         let temp = tableData.get(combinationKey);
         let getdate = "";
-        if (ele.sdate != null) {
+        if (ele[type[0]] != null) {
           getdate = getDataFormate(ele.sdate);
         } else {
-          getdate = getDataFormate(ele.fdate);
+          getdate = getDataFormate(ele[type[1]]);
         }
 
         if (temp.hasOwnProperty(getdate)) {
           // //console.log("datasame ",temp.sdate)
-          if (ele.sdate != null) {
+          if (ele[type[0]] != null) {
             temp[getdate] += ele.sum_sqty;
           } else {
             temp[getdate] += ele.sum_fqty;
           }
         } else {
-          if (ele.sdate != null) {
+          if (ele[type[0]] != null) {
             temp[getdate] = ele.sum_sqty;
           } else {
             temp[getdate] = ele.sum_fqty;
@@ -560,11 +596,12 @@ const App = () => {
         tableData.set(combinationKey, temp);
       } else {
         let getData;
-        if (ele.sdate != null) {
-          getData = getDataFormate(ele.sdate);
+        if (ele[type[0]] != null) {
+          getData = getDataFormate(ele[type[0]]);
           ele[getData] = ele.sum_sqty;
         } else {
-          getData = getDataFormate(ele.fdate);
+          getData = getDataFormate(ele[type[1]]);
+          console.log("****", ele[type[1]], ele[type[0]]);
           ele[getData] = ele.sum_fqty;
         }
 
@@ -573,22 +610,15 @@ const App = () => {
     });
     let arrayFromMap = Array.from(tableData.values());
 
-    console.log("1001 arraydata", arrayFromMap);
     return arrayFromMap;
   };
 
   const getColumnSubData = async (find) => {
     try {
-      console.log(" getColumnSubData function call *** ", find);
       const response = await axios.get(
         "https://horizon-app.onrender.com/api/config"
       );
-      console.log(
-        " in subcolumn find value ",
-        find,
-        " get Data Response From Config File",
-        response
-      );
+
       let subColumns = [];
       let temp1;
       let substring = "";
@@ -655,7 +685,7 @@ const App = () => {
     for (let i = 0; i < columns.length; i++) {
       columnsValue.push(await getColumnSubData(columns[i]));
     }
-    console.log("  getColumnSubData function call 1111 ", columnsValue);
+
     let setcolumnValue = selectrowvalue;
     for (let i = 0; i < columns.length; i++) {
       const getWidth = getWidthData(columns[i]);
@@ -701,8 +731,8 @@ const App = () => {
         },
         dataIndex: columns[i],
         width: getWidth,
+        fixed: "left",
       };
-      console.log("  getColumnSubData function call 2222 ", columnsValue);
 
       precolumn.push(temp);
     }
@@ -734,9 +764,16 @@ const App = () => {
 
   return (
     <>
-      <Row  gutter={0}>
+      <Row gutter={0}>
         {/* <Col xs={22} sm={22} md={22} lg={22} xl={22}> */}{" "}
-        <Col xs={16} sm={14} md={13} lg={14} xl={17} style={{ paddingLeft: "12px" }}>
+        <Col
+          xs={16}
+          sm={14}
+          md={13}
+          lg={14}
+          xl={17}
+          style={{ paddingLeft: "12px" }}
+        >
           {/* {" "} */}
           {/* console.log("start date ",startDate, "endDate ",endDate); */}
           {getdate && <Datepick startDate={startDate} endDate={endDate} />}
@@ -819,7 +856,7 @@ const App = () => {
                 bordered
                 size="middle"
                 scroll={{
-                  x: `calc(300px + ${statecolumns.length * 5}%)`,
+                  x: `calc(700px + ${statecolumns.length * 5}%)`,
                 }}
                 onScroll={handleScroll}
                 pagination={false}
