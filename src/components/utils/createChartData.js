@@ -24,6 +24,7 @@ function formatDate(date) {
 // rowData, columnData,type,keys
  export const createChartData=(rowData, columnData,type,keys)=>{
 
+
     const updatedRowData = rowData.map((item) => {
         // If sweek is null, convert fweek to the desired format
         if (!item.sweek && item.fweek) {
@@ -42,7 +43,7 @@ const chartYAxis=[
  "f_quantity_user",
 ]
 rowData=updatedRowData
-
+console.log(" updateRowsData",rowData)
 let chartData=[]
 columnData.forEach(element => {
  let flag=true
@@ -83,6 +84,7 @@ columnData.forEach(element => {
 
    
 });
+console.log(" chartData final ",chartData)
 return chartData
 }
 

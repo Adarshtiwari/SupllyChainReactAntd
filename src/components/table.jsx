@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./assets/chart.css";
 import Datepick from "./datepick";
 
@@ -25,7 +25,7 @@ import {
 import { test } from "../Constant/constant";
 import FilterModal from "./FilterModal";
 import { createChartData } from "./utils/createChartData";
-
+import { useVT } from "virtualizedtableforantd4";
 const App = () => {
   const [selectionType, setSelectionType] = useState("checkbox");
   const [apiData, setApiData] = useState([]);
@@ -62,12 +62,18 @@ const App = () => {
   const pageSize = 10; // Set your desired page size
   const [currentPage, setCurrentPage] = useState(1);
 
-  const [getDataType, setgetDataType] = useState("");
+
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
   //testing
   const [dynamicColumns, setdynamicColumns] = useState(1);
  const [type,setType]=useState(["sweek","fweek"])
   const [totalwidth, settoatlwidth] = useState(0);
+
+  const tableRef = useRef(null);
+
+
   const getWidthData = (colvalue) => {
     colvalue = colvalue.charAt(0).toLowerCase() + colvalue.slice(1);
     console.log(" in the column widht  ", colvalue);
@@ -113,24 +119,7 @@ const App = () => {
   });
   const [tableDatademo, setTableData] = useState([]);
   const [hasMoreData, setHasMoreData] = useState(true);
-  const handleScroll = (e) => {
-    console.log(" on scrol call");
-    const { scrollTop, clientHeight, scrollHeight } = e.target;
-
-    const { target } = e;
-    const bottomReached =
-      target.scrollHeight - target.scrollTop === target.clientHeight;
-
-    if (bottomReached && hasMoreData && !loading) {
-      // Fetch more data from API
-      setPagination((prevPagination) => ({
-        ...prevPagination,
-        current: pagination.current + 1,
-      }));
-
-      fetchData(pagination.current);
-    }
-  };
+ 
 
   const fetchData = async (pageNumber, type) => {
     try {
@@ -165,7 +154,7 @@ const App = () => {
       console.log(" retunr column ", column);
 
       console.log(" table data ,", column.tableData);
-      setApiData(responseTableData.data);
+
 
      const charTableData=await createChartData(column.tableData,column.dateColumn,type,Keys)
     console.log("chartTable  ",charTableData)
@@ -300,6 +289,7 @@ const App = () => {
     setSelectedLocation(nonNullLocation);
     setSelectedCustomerGroup(nonNullCustomerGroup);
     setSelectrowValue([]);
+    console.log(" selected Keys ",selectedKeys)
     let newSelection = [];
     if (selectedKeys.length <= 0) {
       newSelection = [columnsArray];
@@ -313,9 +303,10 @@ const App = () => {
   };
 
   const closePopup = (keys) => {
-    console.log("POP CLosed ********** ");
+    console.log("POP CLosed ********** ",keys);
     setSelectedColumn(keys);
     setSelectrowValue(keys);
+    setSelectedKeys(keys)
     let temp = {};
     keys.forEach((ele) => {
       temp[ele] = ele;
@@ -336,7 +327,7 @@ const App = () => {
         key !== selectedKeys
     );
 
-    setSelectedKeys(filteredKeys);
+    // setSelectedKeys(filteredKeys);
 
     setShowPopup(false);
   };
@@ -393,51 +384,97 @@ const App = () => {
       console.log("filter URL Preapred", url);
       const response = await axios.get(url);
 
+      const responseColumnData = await axios.get(
+        `https://horizon-app.onrender.com/api/dates/?page=1&page_size=160`
+      );
+
+      const getValidFormateofColumnValue = await getValidFormateofColumn(
+        responseColumnData.data.results,
+        type
+      );
+
       await setTimeout(() => {
         setSelectedRowKeys([]);
 
         setSelectedRowscheck([]);
-        setresultApiData(response.data.results);
+       
       }, 2000);
 
-      setSetfilterApiData(response.data.results);
+
+  
 
       console.log("filter table data calling ", response.data.results);
-      let column = await tableData(response.data.results, arrayData);
+      let column = await tableData(response.data.results,getValidFormateofColumnValue,arrayData,type);
+      console.log("filter TableData function after ",column);
+      const charTableData=await createChartData(column.tableData,column.dateColumn,type,arrayData)
+      console.log("chartTable  filter ",charTableData)
+        // setresultApiData(responseTableData.data.results);
+        setresultApiData(charTableData)
+        setType(type)
 
-      const newRows = column.tableData;
-      console.log("filter data table ", newRows);
-      const prevIds = new Set(statetableData.map((row) => row.id));
+        const newRows = column.tableData;
+        const prevIds = new Set(statetableData.map((row) => row.id));
+  
+        // Filter out rows with IDs already present in the previous data
+        const filteredNewRows = newRows.filter((row) => !prevIds.has(row.id));
+  
+        // Combine the filtered new data with the previous data
+        const updatedData = [...statetableData, ...filteredNewRows];
+  
+        // setStatetableData((prevData) => [...prevData, ...updatedData]);
+        setStatetableData(updatedData);
+  
+        const updatecolumn = column.precolumn.map((col, index) => ({
+          ...col,
+          width: calculateColumnWidth(col.dataIndex || col.title),
+        }));
+  
+        setcolumns(updatecolumn);
+        settoatlwidth(updatecolumn.length);
+        setdynamicColumns(updatecolumn);
+        setPagination((prevPagination) => ({
+          ...prevPagination,
+          total: column.tableData.length,
+        })); 
+          console.log(" get ChartTable Data filter")
+        setLoading(false);
 
-      const filteredNewRows = newRows.filter((row) => !prevIds.has(row.id));
 
-      const updatedData = [...statetableData, ...filteredNewRows];
-      console.log("filter data table  updatedData****", updatedData);
-      setStatetableData(updatedData);
 
-      const updatecolumn = column.precolumns.map((col, index) => ({
-        ...col,
-        width: calculateColumnWidth(col.dataIndex || col.title),
-      }));
-      console.log(
-        " columns *********",
-        column.precolumns,
-        "adarsh ---",
-        updatecolumn
-      );
-      setcolumns(updatecolumn);
-      setdynamicColumns(updatecolumn);
-      setPagination((prevPagination) => ({
-        ...prevPagination,
-        total: column.tableData.length,
-      }));
-      if (startDate != null) {
-        setTimeout(() => {
-          SetgetDate(true);
-          console.log("hello");
-        }, 2000);
-      }
-      setLoading(false);
+
+      // const newRows = column.tableData;
+      // console.log("filter data table ", newRows);
+      // const prevIds = new Set(statetableData.map((row) => row.id));
+
+      // const filteredNewRows = newRows.filter((row) => !prevIds.has(row.id));
+
+      // const updatedData = [...statetableData, ...filteredNewRows];
+      // console.log("filter data table  updatedData****", updatedData);
+      // setStatetableData(updatedData);
+
+      // const updatecolumn = column.precolumns.map((col, index) => ({
+      //   ...col,
+      //   width: calculateColumnWidth(col.dataIndex || col.title),
+      // }));
+      // console.log(
+      //   " columns *********",
+      //   column.precolumns,
+      //   "adarsh ---",
+      //   updatecolumn
+      // );
+      // setcolumns(updatecolumn);
+      // setdynamicColumns(updatecolumn);
+      // setPagination((prevPagination) => ({
+      //   ...prevPagination,
+      //   total: column.tableData.length,
+      // }));
+      // if (startDate != null) {
+      //   setTimeout(() => {
+      //     SetgetDate(true);
+      //     console.log("hello");
+      //   }, 2000);
+      // }
+      // setLoading(false);
     }
   };
 
@@ -780,6 +817,35 @@ console.log(" table data createtableData",tableData)
     fetchData(pagination.current, dataFromChild);
 }
 
+
+
+
+const [vt] = useVT(
+  () => ({
+    onScroll: async ({ top, isEnd }) => {
+      if (isEnd) {
+        console.log("  in the scrool",statetableData.length)
+        if (statetableData && statetableData.length < 200) {
+         await fetchData(pagination.current, ["sweek", "fweek"]);
+       console.log("  in the scrool")
+
+        }
+      }
+    },
+    scroll: {
+      y: "outo"
+    },
+    debug: false
+  }),
+  [statetableData]
+);
+
+// useEffect(() => {
+//   if (!statetableData.length) {
+//     fetchData({ pagination,type });
+//   }
+// }, [ fetchData, pagination]);
+
   /***************** */
 
   return (
@@ -821,7 +887,8 @@ console.log(" table data createtableData",tableData)
         </Col>
       </Row>
       <Row>
-        <div className="card-body-2">
+        <div className="card-body-2"  
+      >
           <Row gutter={16} style={{ height: "100%" }}>
             <Col xs={1} sm={1} md={1} lg={1} xl={1} style={{ height: "100%" }}>
               <Button
@@ -853,6 +920,7 @@ console.log(" table data createtableData",tableData)
               xl={23}
               style={{ height: "100%" }}
               className="tableclass"
+            
             >
               {/* <Table
                 loading={loading}
@@ -869,6 +937,7 @@ console.log(" table data createtableData",tableData)
               <Table
                 rowKey="id"
                 onChange={handleTableChange}
+                // components={vt}
                 rowSelection={{ ...rowSelection, columnWidth: "2%" }}
                 columns={statecolumns}
                 style={tableStyle}
@@ -877,10 +946,13 @@ console.log(" table data createtableData",tableData)
                 bordered
                 size="middle"
                 scroll={{
+                  scrollToFirstRowOnChange: false,
                   x: `calc(700px + ${statecolumns.length * 5}%)`,
                 }}
-                onScroll={handleScroll}
+            
+              
                 pagination={false}
+              
                 // pagination={paginationConfig}
               />
             </Col>

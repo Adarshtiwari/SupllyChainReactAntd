@@ -106,7 +106,7 @@ filteredTableDataWithLocAndCus=sortedTableData
 
       const middleIndex = Math.floor(filteredTableDataWithLocAndCus.length / 2);
 
-      const labels = filteredTableDataWithLocAndCus.map((item) =>
+      let labels = filteredTableDataWithLocAndCus.map((item) =>
         formatDate(item[type[0]] !== null ? item[type[0]] : item[type[1]])
       );
       const dataValuesSqty = filteredTableDataWithLocAndCus.map((item) =>
@@ -120,6 +120,7 @@ filteredTableDataWithLocAndCus=sortedTableData
       );
      
       console.log(" labels",labels)
+      labels = [...new Set(labels)];
       const chartDataObject = {
         labels: labels,
         datasets: [
