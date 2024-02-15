@@ -15,6 +15,8 @@ useEffect(() => {
 
   passapidata=tableMapping
   console.log(" the APi Data ",passapidata)
+  console.log(" the APi Data checkeddata ",checkeddata)
+  console.log(" the APi Data selectedheading ",selectedheading)
   if (Array.isArray(lastArray)) {
     const keysToCheck = lastArray
       .flat(Infinity)
