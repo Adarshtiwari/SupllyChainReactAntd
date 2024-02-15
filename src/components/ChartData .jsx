@@ -68,11 +68,11 @@ const pauseDuration = 2000;
 
     if (tabledata && tabledata.length > 0) {
       const sortedTableData = tabledata
-        .filter((item) => item.sdate !== null || item.fdate !== null)
+        .filter((item) => item[type[0]] !== null || item[type[1]] !== null)
         .slice()
         .sort((a, b) => {
-          const dateA = new Date(a.sdate !== null ? a.sdate : a.fdate);
-          const dateB = new Date(b.sdate !== null ? b.sdate : b.fdate);
+          const dateA = new Date(a[type[0]] !== null ? a[type[0]] : a[type[1]]);
+          const dateB = new Date(b[type[0]] !== null ? b[type[0]]: b[type[1]]);
           return dateA - dateB;
         });
 
@@ -102,24 +102,24 @@ filteredTableDataWithLocAndCus=sortedTableData
    }
 
 
-      console.log("after slected Item Present or not present Data", filteredTableDataWithLocAndCus);
+      console.log("after slected Item Present or not present Data", filteredTableDataWithLocAndCus,"and type ",type);
 
       const middleIndex = Math.floor(filteredTableDataWithLocAndCus.length / 2);
 
       const labels = filteredTableDataWithLocAndCus.map((item) =>
-        formatDate(item.sdate !== null ? item.sdate : item.fdate)
+        formatDate(item[type[0]] !== null ? item[type[0]] : item[type[1]])
       );
       const dataValuesSqty = filteredTableDataWithLocAndCus.map((item) =>
-        item.sdate !== null ? item.sum_sqty : null
+        item[type[0]] !== null ? item.sum_sqty : null
       );
       const dataValuesFQuantityEngine = filteredTableDataWithLocAndCus.map(
-        (item) => (item.fdate !== null ? item.f_quantity_engine : null)
+        (item) => (item[type[1]]!== null ? item.f_quantity_engine : null)
       );
       const dataValuesFQuantityEngineUser = filteredTableDataWithLocAndCus.map(
-        (item) => (item.fdate !== null ? item.f_quantity_user : null)
+        (item) => (item[type[1]] !== null ? item.f_quantity_user : null)
       );
-
-      //console.log(" dataValuesSqty",dataValuesSqty)
+     
+      console.log(" labels",labels)
       const chartDataObject = {
         labels: labels,
         datasets: [
