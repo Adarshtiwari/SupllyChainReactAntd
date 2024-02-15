@@ -458,7 +458,11 @@ const BaseLayout = () => {
          className="content"
         >
           <Routes>
-             <Route path="/planning" element={<Table />} />
+          <Route
+                index
+                path="/planning"
+                element={<Table />}
+              />
              <Route path="/portfolio" element={<Portfolio />} />
              <Route path="/method" element={<Methods />} />
              <Route path="/segment" element={<Segments />} />
