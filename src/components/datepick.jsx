@@ -8,12 +8,19 @@ const { Text } = Typography;
 const dateFormat = 'YYYY-MM-DD';
 const originalFormat = 'DD/MM/YY';
 const targetFormat = 'DD/MM/YYYY';
-function Datepick({startDate,endDate}) {
+function Datepick({startDate,endDate,onDataFromChild}) {
   const initialStartDate = new Date();
   const initialEndDate = new Date();
   const [selectestartdDate, setSelectedStartDate] = useState("");
   const [selecteenddDate, setSelectedEndDate] = useState("");
   const [getdate,SetgetDate]=useState(false)
+  const dataType={
+    sdate:["sdate","fdate"],
+    sweek:["sweek","fweek"],
+    smonth:["smonth","fmonth"],
+    squarter:["squarter","fquarter"],
+    syear:["syear","fyear"]
+  }
   initialEndDate.setMonth(initialEndDate.getMonth() + 1);
 
   const formatDate = (date) => {
@@ -52,6 +59,11 @@ function Datepick({startDate,endDate}) {
 
   const handleSelectChange = (value) => {
     // Update state with the selected value
+
+    
+    
+    console.log(" get value form drop down  ",dataType[value])
+    onDataFromChild(dataType[value]);
     // setData(value);
   };
 
@@ -120,15 +132,15 @@ function Datepick({startDate,endDate}) {
           width: 120
         }}
         onChange={handleSelectChange}
-        defaultValue="Monthly View"
+        defaultValue="Weekly View"
         placeholder="Select View"
         className="custom-select"
         options={[
-          { value: "daily", label: "Daily View" },
-          { value: "weekly", label: "Weekly View" },
-          { value: "monthly", label: "Monthly View" },
-          { value: "quarterly", label: "Quarterly View" },
-          { value: "yearly", label: "Yearly View" },
+          { value: "sdate", label: "Daily View" },
+          { value: "sweek", label: "Weekly View" },
+          { value: "smonth", label: "Monthly View" },
+          { value: "squarter", label: "Quarterly View" },
+          { value: "syear", label: "Yearly View" },
         ]}
         variant="borderless"
         suffixIcon={<i class="fa-solid fa-caret-down"></i>}

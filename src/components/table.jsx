@@ -24,6 +24,7 @@ import {
 } from "../Constant/constant";
 import { test } from "../Constant/constant";
 import FilterModal from "./FilterModal";
+import { createChartData } from "./utils/createChartData";
 
 const App = () => {
   const [selectionType, setSelectionType] = useState("checkbox");
@@ -133,7 +134,8 @@ const App = () => {
 
   const fetchData = async (pageNumber, type) => {
     try {
-      const promises = [];
+    console.log(" type in fetch Data ",type)
+ 
       setLoading(true);
       //column Data
       const responseColumnData = await axios.get(
@@ -144,15 +146,19 @@ const App = () => {
         `https://horizon-app.onrender.com/api/forecastmains/?fields=item,location,customer,sweek,fweek&page=1&page_size=20`
       );
 
+
+
+      console.log("responseTableData *****",responseTableData)
       const getValidFormateofColumnValue = await getValidFormateofColumn(
         responseColumnData.data.results,
         type
       );
 
+      let Keys= ["item", "customer", "location"]
       let column = await tableData(
         responseTableData.data.results,
         getValidFormateofColumnValue,
-        ["item", "customer", "location"],
+        Keys,
         type
       );
 
@@ -160,8 +166,12 @@ const App = () => {
 
       console.log(" table data ,", column.tableData);
       setApiData(responseTableData.data);
-      setresultApiData(responseTableData.data.results);
 
+     const charTableData=await createChartData(column.tableData,column.dateColumn,type,Keys)
+    console.log("chartTable  ",charTableData)
+      // setresultApiData(responseTableData.data.results);
+      setresultApiData(charTableData)
+      setType(type)
       const newRows = column.tableData;
       const prevIds = new Set(statetableData.map((row) => row.id));
 
@@ -185,7 +195,8 @@ const App = () => {
       setPagination((prevPagination) => ({
         ...prevPagination,
         total: column.tableData.length,
-      }));
+      })); 
+        console.log(" get ChartTable Data")
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -478,6 +489,7 @@ const App = () => {
       SetgetDate(true);
     }, 2000);
 
+    let dateColumn=[]
     for (let i = 0; i < responseColumnDatavalue.length; i++) {
       let temp = {
         title: responseColumnDatavalue[i],
@@ -507,6 +519,7 @@ const App = () => {
         className: "customDynamicColumn",
         // selected: selectedValue,
       };
+      dateColumn.push(temp)
       precolumn.push(temp);
     }
 
@@ -515,6 +528,7 @@ console.log(" table data createtableData",tableData)
     return {
       precolumn: precolumn,
       tableData: tableData,
+      dateColumn: dateColumn
     };
   };
 
@@ -760,6 +774,12 @@ console.log(" table data createtableData",tableData)
     return await getWidthData(name);
   };
 
+  function handleDataTypeChange(dataFromChild) {
+    // Do something with the data received from the child
+    console.log("Data from child:", dataFromChild);
+    fetchData(pagination.current, dataFromChild);
+}
+
   /***************** */
 
   return (
@@ -776,7 +796,7 @@ console.log(" table data createtableData",tableData)
         >
           {/* {" "} */}
           {/* console.log("start date ",startDate, "endDate ",endDate); */}
-          {getdate && <Datepick startDate={startDate} endDate={endDate} />}
+          {getdate && <Datepick startDate={startDate} endDate={endDate} onDataFromChild={handleDataTypeChange}/>}
         </Col>
         <Col xs={8} sm={10} md={11} lg={10} xl={7} className="filterdata">
           {/* </Col> */}
@@ -794,6 +814,7 @@ console.log(" table data createtableData",tableData)
                 selectedColumn={selectedColumn}
                 slectColumnValue={selectrowvalue}
                 selectedAllColumnData={selectedColumnValues}
+                type={type}
               />
             )}
           </div>
