@@ -132,7 +132,7 @@ const App = () => {
       );
 
       const responseTableData = await axios.get(
-        `https://horizon-app.onrender.com/api/forecastmains/?fields=item,location,customer,sweek,fweek&page=1&page_size=20`
+        `https://horizon-app.onrender.com/api/forecastmains/?fields=item,location,customer,sweek,fweek&ordering=item,location,customer,sweek,fweek&page=1&page_size=20`
       );
 
 
@@ -171,13 +171,14 @@ const App = () => {
       const updatedData = [...statetableData, ...filteredNewRows];
 
       // setStatetableData((prevData) => [...prevData, ...updatedData]);
+      console.log(" final Data for Table *****",updatedData)
       setStatetableData(updatedData);
 
       const updatecolumn = column.precolumn.map((col, index) => ({
         ...col,
         width: calculateColumnWidth(col.dataIndex || col.title),
       }));
-
+      console.log(" final Data for Table  column *****",updatecolumn)
       setcolumns(updatecolumn);
       settoatlwidth(updatecolumn.length);
       setdynamicColumns(updatecolumn);
@@ -856,15 +857,15 @@ const [vt] = useVT(
           xs={16}
           sm={14}
           md={13}
-          lg={14}
-          xl={17}
+          lg={13}
+          xl={16}
           style={{ paddingLeft: "12px" }}
         >
           {/* {" "} */}
           {/* console.log("start date ",startDate, "endDate ",endDate); */}
           {getdate && <Datepick startDate={startDate} endDate={endDate} onDataFromChild={handleDataTypeChange}/>}
         </Col>
-        <Col xs={8} sm={10} md={11} lg={10} xl={7} className="filterdata">
+        <Col xs={8} sm={10} md={11} lg={9} xl={8} className="filterdata">
           {/* </Col> */}
 
           <FilterModal />

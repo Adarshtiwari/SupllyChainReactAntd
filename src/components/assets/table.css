@@ -134,13 +134,15 @@
       right: 1%;
     }
   }
-  @media screen  and (min-width: 1028px)  and (max-width: 1290px) {
+
+
+  @media screen  and (min-width: 1150px)  and (max-width: 1170px) {
 
     .filterdata{
-      right: .3%;
+    left: 15%;
     }
     .card-body-2{
-   height: 200px !important;
+   height: 205px !important;
    width: 98.5% !important;
    /* background-color: black; */
     }
@@ -150,55 +152,89 @@
   
   }
 
-  @media screen and (min-width: 1400px)and (max-width: 1602px) {
+
+
+
+  @media screen  and (min-width: 1275px)  and (max-width: 1290px) {
+
+    .filterdata{
+     left: 5%;
+    }
+    .card-body-2{
+   height: 205px !important;
+   width: 98.5% !important;
+   /* background-color: black; */
+    }
+    .card-body{
+      width: 98.5% !important;
+    }
+  
+  }
+
+  /* @media screen and (min-width: 1400px)and (max-width: 1602px) {
     .card-body-2{
       height: 300px !important;
     }
-  }
+  } */
+
+
   @media screen and (min-width: 1601px)and (max-width: 1708px) {
     .card-body-2{
       height: 340px !important;
     }
   }
 
-  @media screen and (min-width: 1400px)and (max-width: 1700px) {
+  @media screen and (min-width: 1400px)and (max-width: 1450px) {
 
     .filterdata{
-      left: 5%;
+      left: 9%;
     }
     .card-body-2{
-      height: 250px !important;
+      height: 270px !important;
     }
    
   
 }
 
+@media screen and (min-width: 1599px)and (max-width: 1610px) {
+
+    .filterdata{
+            left: 12%;
+    }
+    .card-body-2{
+      height: 340px !important;
+    }
+   
+  
+}
+
+
 @media screen and (min-width: 1701px)and (max-width: 1900px) {
 
   .filterdata{
-    left: 7%;
+    left: 13%;
   }
   .card-body-2{
-    height: 340px !important;
+    height: 387px !important;
   }
 }
 
 @media screen and (min-width: 1901px)and (max-width: 2500px) {
 
   .filterdata{
-    left: 8%;
+    left: 15%;
   }
   .card-body-2{
-    height: 420px !important;
+    height: 479px  !important;
   }
 }
 @media screen and (min-width: 2501px) {
 
   .filterdata{
-    left: 14%;
+    left: 19%;
   }
   .card-body-2{
-    height: 630px !important;
+    height: 759px  !important;
   }
 
 }
