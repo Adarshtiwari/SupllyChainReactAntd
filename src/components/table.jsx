@@ -527,7 +527,7 @@ const App = () => {
         const updatedData = [...statetableData, ...filteredNewRows];
   
         // setStatetableData((prevData) => [...prevData, ...updatedData]);
-        setStatetableData(updatedData);
+        setStatetableData(column.tableData);
   
         const updatecolumn = column.precolumn.map((col, index) => ({
           ...col,
