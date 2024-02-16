@@ -33,3 +33,31 @@
 :where(.css-dev-only-do-not-override-1b0bdye).ant-divider-horizontal.ant-divider-with-text{
     margin: 3px !important
 }
+
+  @media screen and (min-width: 1160px)and (max-width: 1170px)  {
+  .ant-popover-inner{
+    width: 625px !important;
+    height: 370px !important;
+  }
+  }
+
+  @media screen and (min-width: 1275px)and (max-width: 1285px)  {
+  .ant-popover-inner{
+    width: 725px !important;
+    height: 390px !important;
+  }
+  }
+
+ @media screen and (min-width: 1412px)and (max-width: 1430px)  {
+  .ant-popover-inner{
+    width: 725px !important;
+    height: 460px !important;
+  }
+  }
+
+ @media screen and (min-width: 1910px)and (max-width: 1930px)  {
+  .ant-popover-inner{
+    width: 825px !important;
+    height: 490px !important;
+  }
+  }

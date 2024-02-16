@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useContext,useEffect, useRef, useState } from "react";
 import "./assets/chart.css";
 import Datepick from "./datepick";
 
 import PopupComponent from "./PopupComponent"; //popup component
 
-import { Table, Row, Col, Button, Select, Tooltip } from "antd";
+import { Table, Row, Col, Button, Select, Tooltip,Input, Popconfirm, Form } from "antd";
 import axios from "axios";
 import Chartda from "./ChartData ";
 import "./assets/table.css";
@@ -26,6 +26,109 @@ import { test } from "../Constant/constant";
 import FilterModal from "./FilterModal";
 import { createChartData } from "./utils/createChartData";
 import { useVT } from "virtualizedtableforantd4";
+import { typeImplementation } from "@testing-library/user-event/dist/type/typeImplementation";
+
+//editable table
+const EditableContext = React.createContext(null);
+
+const EditableRow = ({ index, ...props }) => {
+  const [form] = Form.useForm();
+  return (
+    <Form form={form} component={false}>
+      <EditableContext.Provider value={form}>
+        <tr {...props} />
+      </EditableContext.Provider>
+    </Form>
+  );
+};
+
+const EditableCell = ({
+  title,
+  editable,
+  children,
+  dataIndex,
+  record,
+  handleSave,
+  ...restProps
+}) => {
+  const [editing, setEditing] = useState(false);
+  const inputRef = useRef(null);
+  const form = useContext(EditableContext);
+
+  useEffect(() => {
+    if (editing) {
+      inputRef.current.focus();
+    }
+  }, [editing]);
+
+  const toggleEdit = () => {
+    setEditing(!editing);
+    form.setFieldsValue({
+      [dataIndex]: record[dataIndex],
+    });
+  };
+
+  const save = async () => {
+    try {
+      const values = await form.validateFields();
+      toggleEdit();
+      handleSave({
+        ...record,
+        ...values,
+      });
+    } catch (errInfo) {
+      console.log('Save failed:', errInfo);
+    }
+  };
+
+  const handleCellClick = () => {
+    if (editable) {
+      toggleEdit();
+    }
+  };
+
+  let childNode = children;
+
+  if (editable) {
+    childNode = editing ? (
+      <Form.Item
+        style={{
+          margin: 0,
+        }}
+        name={dataIndex}
+        rules={[
+          {
+            required: true,
+            message: `${title} is required.`,
+          },
+        ]}
+      >
+        <Input ref={inputRef} onPressEnter={save} onBlur={save} />
+      </Form.Item>
+    ) : (
+      <div
+        className="editable-cell-value-wrap"
+        style={{
+          paddingRight: 24,
+        }}
+        onClick={handleCellClick}
+      >
+        {children}
+      </div>
+    );
+  }
+
+  return <td {...restProps}>{childNode}</td>;
+};
+
+
+
+
+
+
+
+
+
 const App = () => {
   const [selectionType, setSelectionType] = useState("checkbox");
   const [apiData, setApiData] = useState([]);
@@ -37,7 +140,7 @@ const App = () => {
   const [selectedKeys, setSelectedKeys] = useState([]);
   const [selectedheadings, setselectedheadings] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
-  const itemsPerPage = 5;
+  const itemsPerPage = 1;
   const [statecolumns, setcolumns] = useState([]);
   const [statetableData, setStatetableData] = useState([]);
   const [selectedRowscheck, setSelectedRowscheck] = useState([]);
@@ -130,12 +233,13 @@ const App = () => {
       const responseColumnData = await axios.get(
         `https://horizon-app.onrender.com/api/dates/?page=1&page_size=160`
       );
-
+      console.log("responseColumnData *****",responseColumnData)
+     console.log("table Url Calling ",`https://horizon-app.onrender.com/api/forecastmains/?fields=item,location,customer,${type[0]},${type[1]}&page=${page}&page_size=20`)
       const responseTableData = await axios.get(
-        `https://horizon-app.onrender.com/api/forecastmains/?fields=item,location,customer,sweek,fweek&ordering=item,location,customer,sweek,fweek&page=1&page_size=20`
+        `https://horizon-app.onrender.com/api/forecastmains/?fields=item,location,customer,${type[0]},${type[1]}&page=1&page_size=20`
       );
 
-
+      setPage(prevPage => prevPage + 1);
 
       console.log("responseTableData *****",responseTableData)
       const getValidFormateofColumnValue = await getValidFormateofColumn(
@@ -380,7 +484,7 @@ const App = () => {
         BaseUrl +
         "/?fields=" +
         query +
-        ",fdate,sdate,sqty,f_quantity_engine,f_quantity_user&ordering=item,customer,location,sdate";
+        `,${type[0]},${type[1]}&page=1&page_size=20`;
 
       console.log("filter URL Preapred", url);
       const response = await axios.get(url);
@@ -513,10 +617,7 @@ const App = () => {
       type
     );
 
-    const responseTableDatavalue = sortedConverToStringUniqueArray(
-      responseTableData,
-      type
-    );
+ 
 
     let precolumn = await createColumns(keys);
 
@@ -533,6 +634,7 @@ const App = () => {
         title: responseColumnDatavalue[i],
         dataIndex: responseColumnDatavalue[i],
         width: "5px",
+        editable: true,
 
         sorter: (a, b) => {
           // Handle null or undefined values appropriately
@@ -608,61 +710,51 @@ console.log(" table data createtableData",tableData)
     return sortedStringDate;
   }
 
-  const createtableData = (resutlAPI, keys, type) => {
-    //
-    let tableData = new Map();
-    resutlAPI.forEach((ele) => {
-      let combinationKey = "";
-      for (let i = 0; i < keys.length; i++) {
-        if (i == keys.length - 1) {
-          combinationKey += ele[keys[i]];
-        } else {
-          combinationKey += ele[keys[i]] + "-";
-        }
-      }
-
-      if (tableData.has(combinationKey)) {
-        let temp = tableData.get(combinationKey);
-        let getdate = "";
-        if (ele[type[0]] != null) {
-          getdate = getDataFormate(ele.sdate);
-        } else {
-          getdate = getDataFormate(ele[type[1]]);
-        }
-
-        if (temp.hasOwnProperty(getdate)) {
-          // //console.log("datasame ",temp.sdate)
-          if (ele[type[0]] != null) {
-            temp[getdate] += ele.sum_sqty;
-          } else {
-            temp[getdate] += ele.sum_fqty;
-          }
-        } else {
-          if (ele[type[0]] != null) {
-            temp[getdate] = ele.sum_sqty;
-          } else {
-            temp[getdate] = ele.sum_fqty;
-          }
-        }
-
-        tableData.set(combinationKey, temp);
-      } else {
-        let getData;
-        if (ele[type[0]] != null) {
-          getData = getDataFormate(ele[type[0]]);
-          ele[getData] = ele.sum_sqty;
-        } else {
-          getData = getDataFormate(ele[type[1]]);
-          console.log("****", ele[type[1]], ele[type[0]]);
-          ele[getData] = ele.sum_fqty;
-        }
-
-        tableData.set(combinationKey, ele);
-      }
+  function DDMMYY(inputDateString) {
+    const dateObject = new Date(inputDateString);
+  
+    const formattedDate = dateObject.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "2-digit",
     });
-    let arrayFromMap = Array.from(tableData.values());
+    return formattedDate;
+  }
 
-    return arrayFromMap;
+  const createtableData = (results, keys, type) => {
+    //
+    console.group("createtableData ",results,type)
+    let finalRowData=[]
+    let id=0
+    results.forEach((elementrow) => {
+      let temp = elementrow.combination;
+      elementrow.data.data.forEach((element) => {
+      let date = element[type[0]] != null ? element[type[0]] : element[type[1]];
+      let skipCount = 0;
+      for (const key in element.aggregates) {
+          if (skipCount < 2) {
+              skipCount++;
+              console.log("pass date ",date)
+              temp[DDMMYY(date)] =element[type[0]] != null? element.aggregates.sum_sqty: element.aggregates.sum_fqty;
+              continue;
+            }
+            else{
+              temp[key]=element.aggregates[key]
+            }
+         
+         
+      }
+      });
+      console.log("createtableData push  ",temp)
+      temp.id=id
+      id+=1
+      finalRowData.push(temp)
+    });
+  
+    
+
+    console.groupEnd("createtableData finalRowData  ",finalRowData)
+    return finalRowData
   };
 
   const getColumnSubData = async (find) => {
@@ -840,13 +932,55 @@ const [vt] = useVT(
   }),
   [statetableData]
 );
+const handleScroll = e => {
+  const { target } = e;
 
-// useEffect(() => {
-//   if (!statetableData.length) {
-//     fetchData({ pagination,type });
-//   }
-// }, [ fetchData, pagination]);
+  // Check if the user has scrolled to the bottom of the table
+  if (target.scrollHeight - target.scrollTop === target.clientHeight) {
+    console.log(" scrolling function ")
+    // fetchData("",type); // Load more data when scrolled to the bottom
+  }
+};
 
+
+const [count, setCount] = useState(2);
+
+const handleDelete = (key) => {
+  const newData = statetableData.filter((item) => item.key !== key);
+  setStatetableData(newData);
+};
+const handleSave = (row) => {
+  const newData = [...statetableData];
+  const index = newData.findIndex((item) => row.key === item.key);
+  const item = newData[index];
+  newData.splice(index, 1, {
+    ...item,
+    ...row,
+  });
+  setStatetableData(newData);
+};
+const components = {
+  body: {
+    row: EditableRow,
+    cell: EditableCell,
+  },
+};
+const columns = statecolumns.map((col) => {
+  if (!col.editable) {
+    return col;
+  }
+
+  return {
+    ...col,
+    onCell: (record) => ({
+      record,
+      editable: col.editable,
+      dataIndex: col.dataIndex,
+      title: col.title,
+      handleSave,
+    }),
+  };
+});
   /***************** */
 
   return (
@@ -921,31 +1055,20 @@ const [vt] = useVT(
               xl={23}
               style={{ height: "100%" }}
               className="tableclass"
-            
+              onScroll={handleScroll}
             >
-              {/* <Table
-                loading={loading}
-                onChange={handleTableChange}
-                rowSelection={{ ...rowSelection, columnWidth: "2%" }}
-                columns={statecolumns}
-                dataSource={statetableData}
-                style={tableStyle}
-                onScroll={handleScroll}
-                rowKey="id"
-                className="customCss custom-table"
-                pagination={paginationConfig}
-              /> */}
+          
               <Table
                 rowKey="id"
                 onChange={handleTableChange}
-                // components={vt}
+                components={components}
+                rowClassName={() => 'editable-row'}
                 rowSelection={{ ...rowSelection, columnWidth: "2%" }}
-                columns={statecolumns}
+                columns={columns}
                 style={tableStyle}
                 dataSource={statetableData}
                 loading={loading}
                 bordered
-                size="middle"
                 scroll={{
                   scrollToFirstRowOnChange: false,
                   x: `calc(700px + ${statecolumns.length * 5}%)`,
