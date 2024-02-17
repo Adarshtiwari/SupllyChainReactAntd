@@ -236,7 +236,7 @@ const App = () => {
       console.log("responseColumnData *****",responseColumnData)
      console.log("table Url Calling ",`https://horizon-app.onrender.com/api/forecastmains/?fields=item,location,customer,${type[0]},${type[1]}&page=${page}&page_size=20`)
       const responseTableData = await axios.get(
-        `https://horizon-app.onrender.com/api/forecastmains/?fields=item,location,customer,${type[0]},${type[1]}&page=1&page_size=20`
+        `https://horizon-app.onrender.com/api/forecastmains/?fields=item,location,customer,${type[0]},${type[1]}&page=1&page_size=1000`
       );
 
       setPage(prevPage => prevPage + 1);
@@ -362,7 +362,7 @@ const App = () => {
     marginBottom: 0,
     minHeight: "100%",
     width: "100%",
-    overflowY: "auto",
+    // overflowY: "auto",
   };
   // changes
   const handleMaximizeToggle = () => {
@@ -484,7 +484,7 @@ const App = () => {
         BaseUrl +
         "/?fields=" +
         query +
-        `,${type[0]},${type[1]}&page=1&page_size=20`;
+        `,${type[0]},${type[1]}&page=1&page_size=1000`;
 
       console.log("filter URL Preapred", url);
       const response = await axios.get(url);
@@ -493,6 +493,8 @@ const App = () => {
         `https://horizon-app.onrender.com/api/dates/?page=1&page_size=160`
       );
 
+
+      console.log(" filter table row data ",response.data.results," type  ",type)
       const getValidFormateofColumnValue = await getValidFormateofColumn(
         responseColumnData.data.results,
         type
@@ -508,7 +510,7 @@ const App = () => {
 
   
 
-      console.log("filter table data calling ", response.data.results);
+   
       let column = await tableData(response.data.results,getValidFormateofColumnValue,arrayData,type);
       console.log("filter TableData function after ",column);
       const charTableData=await createChartData(column.tableData,column.dateColumn,type,arrayData)
@@ -734,7 +736,7 @@ console.log(" table data createtableData",tableData)
       for (const key in element.aggregates) {
           if (skipCount < 2) {
               skipCount++;
-              console.log("pass date ",date)
+            
               temp[DDMMYY(date)] =element[type[0]] != null? element.aggregates.sum_sqty: element.aggregates.sum_fqty;
               continue;
             }
@@ -745,7 +747,7 @@ console.log(" table data createtableData",tableData)
          
       }
       });
-      console.log("createtableData push  ",temp)
+     
       temp.id=id
       id+=1
       finalRowData.push(temp)
@@ -913,42 +915,24 @@ console.log(" table data createtableData",tableData)
 
 
 
-const [vt] = useVT(
-  () => ({
-    onScroll: async ({ top, isEnd }) => {
-      if (isEnd) {
-        console.log("  in the scrool",statetableData.length)
-        if (statetableData && statetableData.length < 200) {
-         await fetchData(pagination.current, ["sweek", "fweek"]);
-       console.log("  in the scrool")
 
-        }
-      }
-    },
-    scroll: {
-      y: "outo"
-    },
-    debug: false
-  }),
-  [statetableData]
-);
-const handleScroll = e => {
-  const { target } = e;
-
-  // Check if the user has scrolled to the bottom of the table
-  if (target.scrollHeight - target.scrollTop === target.clientHeight) {
-    console.log(" scrolling function ")
-    // fetchData("",type); // Load more data when scrolled to the bottom
+const handleScroll = () => {
+  const tableDiv = tableRef.current;
+  if (
+    tableDiv.scrollTop + tableDiv.clientHeight >=
+    tableDiv.scrollHeight
+  ) {
+    // Load more data when scrolled to the bottom
+    console.log('Hello! Scrolled to the end.');
+    if (!loading) {
+    }
   }
 };
 
 
-const [count, setCount] = useState(2);
 
-const handleDelete = (key) => {
-  const newData = statetableData.filter((item) => item.key !== key);
-  setStatetableData(newData);
-};
+
+
 const handleSave = (row) => {
   const newData = [...statetableData];
   const index = newData.findIndex((item) => row.key === item.key);
@@ -1023,6 +1007,9 @@ const columns = statecolumns.map((col) => {
       </Row>
       <Row>
         <div className="card-body-2"  
+             style={{ overflowY: 'auto' }}
+             onScroll={handleScroll}
+             ref={tableRef}
       >
           <Row gutter={16} style={{ height: "100%" }}>
             <Col xs={1} sm={1} md={1} lg={1} xl={1} style={{ height: "100%" }}>
@@ -1053,12 +1040,17 @@ const columns = statecolumns.map((col) => {
               md={23}
               lg={23}
               xl={23}
-              style={{ height: "100%" }}
+         
               className="tableclass"
-              onScroll={handleScroll}
+       
+         
             >
-          
-              <Table
+          <div
+          className="infinite-scroll-container"
+          // onScroll={handleScroll}
+       
+        >
+        <Table
                 rowKey="id"
                 onChange={handleTableChange}
                 components={components}
@@ -1072,13 +1064,34 @@ const columns = statecolumns.map((col) => {
                 scroll={{
                   scrollToFirstRowOnChange: false,
                   x: `calc(700px + ${statecolumns.length * 5}%)`,
+                  y: 500
                 }}
             
               
                 pagination={false}
-              
-                // pagination={paginationConfig}
               />
+        </div>
+          
+              {/* <Table
+                rowKey="id"
+                onChange={handleTableChange}
+                components={components}
+                rowClassName={() => 'editable-row'}
+                rowSelection={{ ...rowSelection, columnWidth: "2%" }}
+                columns={columns}
+                style={tableStyle}
+                dataSource={statetableData}
+                loading={loading}
+                bordered
+                scroll={{
+                  scrollToFirstRowOnChange: false,
+                  x: `calc(700px + ${statecolumns.length * 5}%)`,
+                  y: 500
+                }}
+            
+              
+                pagination={false}
+              /> */}
             </Col>
           </Row>
         </div>
