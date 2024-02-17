@@ -159,8 +159,11 @@ const App = () => {
   const [page, setPage] = useState(1);
   const [load,setLoad] = useState(true);
   //testing
-  const [type, setType] = useState(["sweek", "fweek"]);
+  const [type, setType] = useState(["sweek","fweek"]);
   const tableRef = useRef(null);
+
+  const [triggerEffect, setTriggerEffect] = useState(["sweek","fweek"]);
+
   const getWidthData = (colvalue) => {
     colvalue = colvalue.charAt(0).toLowerCase() + colvalue.slice(1);
     if (
@@ -243,18 +246,17 @@ const App = () => {
 
       console.log(" table data ,", column.tableData);
 
-      const charTableData = await createChartData(
-        responseTableData.data.results,
-        column.dateColumn,
-        type,
-        Keys
-      );
-      console.log("chartTable  ", charTableData);
+      // const charTableData = await createChartData(
+      //   responseTableData.data.results,
+      //   column.dateColumn,
+      //   type,
+      //   Keys
+      // );
+      // console.log("chartTable  ", charTableData);
 
-      setresultApiData(charTableData);
+      // setresultApiData(charTableData);
 
 
-      setType(type);
       const newRows = column.tableData;
       const prevIds = new Set(statetableData.map((row) => row.id));
 
@@ -432,14 +434,7 @@ const App = () => {
 
   // ************** Get Table Data on Click***********
   const getColumnData = async (newValue, pre) => {
-    // console.log(
-    //   " In the Get Columns ********  new value->",
-    //   newValue,
-    //   " old value-> ",
-    //   pre,
-    //   "  current Column Array->  ",
-    //   selectrowvalue
-    // );
+  
 
     let updateColumnValue = selectrowvalue;
 
@@ -454,17 +449,17 @@ const App = () => {
     //console.log("Updated Column Array->  ", updateColumnValue);
     setStatetableData([])
 
-
+    
     getFilterData(updateColumnValue);
   };
 
-  const getFilterData = async ( arrayData,calling=false) => {
+  const getFilterData = async ( arrayData,calling=false,typeoption=triggerEffect) => {
     const selectedValuesArray = Object.values(selectedColumnValues);
 
     setLoad(true)
     let pagenum=1
     if(!calling)
-    { console.log(" value in calling ",calling)
+    { console.log(" value in calling ",calling ,"type value ",triggerEffect)
     setPage(1)
     statetableData=[]
     setStatetableData([])
@@ -494,7 +489,7 @@ const App = () => {
         BaseUrl +
         "/?fields=" +
         query +
-        `,${type[0]},${type[1]}&page=${pagenum}&page_size=700`;
+        `,${typeoption[0]},${typeoption[1]}&page=${pagenum}&page_size=700`;
 
       console.log("filter URL Preapred", url);
       const response = await axios.get(url);
@@ -509,12 +504,12 @@ const App = () => {
       //console.log(" filter table row data ",response.data.results," type  ",type)
       const getValidFormateofColumnValue = await getValidFormateofColumn(
         responseColumnData.data.results,
-        type
+        typeoption
       );
 
       await setTimeout(() => {
         setSelectedRowKeys([]);
-
+     
         setSelectedRowscheck([]);
       }, 2000);
 
@@ -522,21 +517,21 @@ const App = () => {
         response.data.results,
         getValidFormateofColumnValue,
         arrayData,
-        type
+        typeoption
       );
       console.log("filter TableData function after ",column);
 
-      const charTableData = createChartData(
-        column.tableData,
-        column.dateColumn,
-        type,
-        arrayData
-      );
+      // const charTableData = createChartData(
+      //   column.tableData,
+      //   column.dateColumn,
+      //   typeoption,
+      //   arrayData
+      // );
       //console.log("chartTable  filter ",charTableData)
       // setresultApiData(responseTableData.data.results);
-      setresultApiData(charTableData);
+      // setresultApiData(charTableData);
 
-      setType(type);
+     
       console.log(" the value of tabe ",statetableData.length)
       const newRows = column.tableData;
       const prevIds = new Set(statetableData.map((row) => row.id));
@@ -565,6 +560,7 @@ const App = () => {
       //console.log(" get ChartTable Data filter")
       setLoading(false);
       setLoad(false)
+ 
     }
   };
 
@@ -572,7 +568,7 @@ const App = () => {
   useEffect(() => {
     // getFilterData(pagination.current, ["sweek", "fweek"]);
     setStatetableData([])
-    getFilterData(selectedKeys)
+    getFilterData(selectedKeys,false,["sweek", "fweek"])
   }, []);
 
   useEffect(()=>{
@@ -588,6 +584,8 @@ const App = () => {
     keys,
     type
   ) => {
+
+ 
     const responseColumnDatavalue = sortedConverToStringUniqueArray(
       responseColumnData,
       type
@@ -601,7 +599,7 @@ const App = () => {
       SetendtDate(responseColumnDatavalue[responseColumnDatavalue.length - 1]);
       SetgetDate(true);
     }, 2000);
-
+   console.log(" typess table data" ,type)
     let dateColumn = [];
     for (let i = 0; i < responseColumnDatavalue.length; i++) {
       let temp = {
@@ -638,7 +636,7 @@ const App = () => {
     }
 
     let tableData = await createtableData(responseTableData, keys, type);
-    //console.log(" table data createtableData",tableData)
+    console.log(" table data createtableData",tableData,"precolumn ",precolumn)
     return {
       precolumn: precolumn,
       tableData: tableData,
@@ -648,6 +646,7 @@ const App = () => {
 
   function sortedConverToStringUniqueArray(resultObject, type) {
     //sorted Days
+  console.log(" column sortedConverToStringUniqueArray ",resultObject,"typess ",type)
     const sortedDates = resultObject
       .map((item) =>
         item[type[0]] !== null
@@ -869,18 +868,27 @@ const App = () => {
     // Handle table changes like sorting or filtering if needed
     //console.log(" table change  ", pagination);
     if (pagination.current !== currentPage) {
-      fetchData(pagination.current);
+      // fetchData(pagination.current);
       setCurrentPage(pagination.current);
     }
   };
   const calculateColumnWidth = async (name) => {
     return await getWidthData(name);
   };
+  useEffect(() => {
+    // This will be called after each render and when triggerEffect changes
+    console.log("tigger ",triggerEffect)
+    getFilterData(selectedKeys,false,triggerEffect)
+setType(triggerEffect)
+  }, [triggerEffect]);
 
   function handleDataTypeChange(dataFromChild) {
     // Do something with the data received from the child
     //console.log("Data from child:", dataFromChild);
-    fetchData(pagination.current, dataFromChild);
+    setTriggerEffect(dataFromChild)
+    console.log("dataFromChild ",dataFromChild)
+    // fetchData(pagination.current, dataFromChild);
+   
   }
 
   const handleScroll = async () => {

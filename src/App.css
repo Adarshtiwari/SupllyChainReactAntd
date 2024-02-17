@@ -20,8 +20,8 @@ body{
   height: 190px !important;
   border-radius: 15px !important;
   overflow: hidden !important;
-  width: 99%;
-  margin: 5px;
+  width: 98%;
+  margin: 0px 15px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 1px 5px;
   margin-top: 10px;
 }
