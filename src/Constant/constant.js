@@ -247,4 +247,6 @@ export const demotabledata=[
     }
 ]
 
+export const keys=["item", "customer", "location"]
+
 const BaseUrlforfirstcall="https://horizon-app.onrender.com/api/forecastmains/?fields=item,customer,location,sdate,fdate,f_quantity_engine,f_quantity_user&ordering=item,customer,location,sdate"

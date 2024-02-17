@@ -1,10 +1,23 @@
-import React, { useCallback, useContext,useEffect, useRef, useState } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import "./assets/chart.css";
 import Datepick from "./datepick";
 
 import PopupComponent from "./PopupComponent"; //popup component
 
-import { Table, Row, Col, Button, Select, Tooltip,Input, Popconfirm, Form } from "antd";
+import {
+  Table,
+  Row,
+  Col,
+  Button,
+  Select,
+  Input,
+  Form,
+} from "antd";
 import axios from "axios";
 import Chartda from "./ChartData ";
 import "./assets/table.css";
@@ -12,21 +25,15 @@ import {
   PlusCircleTwoTone,
   FullscreenOutlined,
   FullscreenExitOutlined,
-  FilterFilled,
-  ArrowDownOutlined,
-  ArrowUpOutlined,
 } from "@ant-design/icons/lib/icons";
 import {
-  API_URL,
   BaseUrl,
-  demotabledata,
-  tableMapping,
+  keys,
 } from "../Constant/constant";
 import { test } from "../Constant/constant";
 import FilterModal from "./FilterModal";
 import { createChartData } from "./utils/createChartData";
-import { useVT } from "virtualizedtableforantd4";
-import { typeImplementation } from "@testing-library/user-event/dist/type/typeImplementation";
+
 
 //editable table
 const EditableContext = React.createContext(null);
@@ -77,7 +84,7 @@ const EditableCell = ({
         ...values,
       });
     } catch (errInfo) {
-      console.log('Save failed:', errInfo);
+      console.log("Save failed:", errInfo);
     }
   };
 
@@ -120,37 +127,23 @@ const EditableCell = ({
 
   return <td {...restProps}>{childNode}</td>;
 };
-
-
-
-
-
-
-
-
+//editable table close
 
 const App = () => {
-  const [selectionType, setSelectionType] = useState("checkbox");
-  const [apiData, setApiData] = useState([]);
   const [resultapiData, setresultApiData] = useState([]);
   const [selectedProductGroup, setSelectedProductGroup] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [selectedCustomerGroup, setSelectedCustomerGroup] = useState(null);
   const [isMaximized, setIsMaximized] = useState(false);
-  const [selectedKeys, setSelectedKeys] = useState([]);
+  const [selectedKeys, setSelectedKeys] = useState(keys);
   const [selectedheadings, setselectedheadings] = useState([]);
-  const [pageNumber, setPageNumber] = useState(0);
-  const itemsPerPage = 1;
   const [statecolumns, setcolumns] = useState([]);
-  const [statetableData, setStatetableData] = useState([]);
+  let [statetableData, setStatetableData] = useState([]);
   const [selectedRowscheck, setSelectedRowscheck] = useState([]);
   const [selectedOption, setSelectedOption] = useState("");
   const [loading, setLoading] = useState(true);
-  const [selectedRowsKeyCheck, setSelectedRowsKeyCheck] = useState([]);
   const [selectedColumn, setSelectedColumn] = useState([]);
-  const [mappingId, setMappingId] = useState(null);
   const [selectrowvalue, setSelectrowValue] = useState([]);
-  const [SetfilterApiData, setSetfilterApiData] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [selectedColumnValues, setSelectedColumnValues] = useState({
     item: "item",
@@ -160,26 +153,16 @@ const App = () => {
   const [startDate, SetstartDate] = useState(null);
   const [endDate, SetendtDate] = useState(null);
   const [getdate, SetgetDate] = useState(false);
-
   const [totalItems, setTotalItems] = useState(0);
   const pageSize = 10; // Set your desired page size
   const [currentPage, setCurrentPage] = useState(1);
-
-
   const [page, setPage] = useState(1);
-
-
+  const [load,setLoad] = useState(true);
   //testing
-  const [dynamicColumns, setdynamicColumns] = useState(1);
- const [type,setType]=useState(["sweek","fweek"])
-  const [totalwidth, settoatlwidth] = useState(0);
-
+  const [type, setType] = useState(["sweek", "fweek"]);
   const tableRef = useRef(null);
-  const [hasMore, setHasMore] = useState(true);
-
   const getWidthData = (colvalue) => {
     colvalue = colvalue.charAt(0).toLowerCase() + colvalue.slice(1);
-
     if (
       "item" == colvalue ||
       "customer" == colvalue ||
@@ -200,46 +183,55 @@ const App = () => {
       return `${100 / colvalue.length}%`;
     }
   };
-
-  // *****
-
+  function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
   //filter model
-
-
-
-
-
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 200, // Adjust the page size as needed
     total: 0,
   });
 
-
-  const fetchData = async (pageNumber, type) => {
+  const fetchData = async (pageNumber, type,calling=false) => {
     try {
-    console.log(" type in fetch Data ",type,"page size ",page)
- 
-      setLoading(true);
+      console.log(" type in fetch Data ", type, "page size ", page);
+      setLoad(true)
+      if(!calling)
+      {
+        setLoading(true);
+      }
+      let query = "";
+
+      for (let i = 0; i < selectedKeys.length; i++) {
+    
+          query += selectedKeys[i] + ",";
+       
+      }
       //column Data
       const responseColumnData = await axios.get(
-        `https://horizon-app.onrender.com/api/dates/?page=1&page_size=160`
+        `https://horizon-app.onrender.com/api/dates/?page=1&page_size=1200`
       );
- 
-     console.log("table Url Calling ",`https://horizon-app.onrender.com/api/forecastmains/?fields=item,location,customer,${type[0]},${type[1]}&page=${page}&page_size=700`)
+
+      console.log(
+        "table Url Calling ",
+        `https://horizon-app.onrender.com/api/forecastmains/?fields=${query}${type[0]},${type[1]}&page=${page}&page_size=300`
+      );
       const responseTableData = await axios.get(
-        `https://horizon-app.onrender.com/api/forecastmains/?fields=item,location,customer,${type[0]},${type[1]}&page=${page}&page_size=700`
+        `https://horizon-app.onrender.com/api/forecastmains/?fields=${query}${type[0]},${type[1]}&page=${page}&page_size=300`
       );
 
-      setPage(prevPage => prevPage + 1);
 
-  
+    // console.log(" responseTableData ",responseTableData)
+
+      setPage((prevPage) => prevPage + 1);
+
       const getValidFormateofColumnValue = await getValidFormateofColumn(
         responseColumnData.data.results,
         type
       );
 
-      let Keys= ["item", "customer", "location"]
+      let Keys = keys;
       let column = await tableData(
         responseTableData.data.results,
         getValidFormateofColumnValue,
@@ -247,16 +239,22 @@ const App = () => {
         type
       );
 
-      console.log(" retunr column ", column.dateColumn);
+      console.log("  column data ", column.dateColumn);
 
       console.log(" table data ,", column.tableData);
 
+      const charTableData = await createChartData(
+        responseTableData.data.results,
+        column.dateColumn,
+        type,
+        Keys
+      );
+      console.log("chartTable  ", charTableData);
 
-     const charTableData=await createChartData(column.tableData,column.dateColumn,type,Keys)
-    console.log("chartTable  ",charTableData)
-   
-      setresultApiData(charTableData)
-      setType(type)
+      setresultApiData(charTableData);
+
+
+      setType(type);
       const newRows = column.tableData;
       const prevIds = new Set(statetableData.map((row) => row.id));
 
@@ -276,19 +274,17 @@ const App = () => {
       }));
       //console.log(" final Data for Table  column *****",updatecolumn)
       setcolumns(updatecolumn);
-      settoatlwidth(updatecolumn.length);
-      setdynamicColumns(updatecolumn);
       setPagination((prevPagination) => ({
         ...prevPagination,
         total: column.tableData.length,
-      })); 
-        //console.log(" get ChartTable Data")
+      }));
+      //console.log(" get ChartTable Data")
       setLoading(false);
-      setHasMore(true)
-      return true
+      setLoad(false)
+      return true;
     } catch (error) {
       console.error("Error fetching data:", error);
-      return false
+      return false;
     }
   };
 
@@ -362,7 +358,7 @@ const App = () => {
   // changes
   const handleMaximizeToggle = () => {
     setIsMaximized((prevIsMaximized) => !prevIsMaximized);
-    console.log("isMaximized",isMaximized)
+    // console.log("isMaximized", isMaximized);
     const d = document.querySelector("#ch");
     if (d) {
       d.style.display = isMaximized ? "block" : "none";
@@ -407,13 +403,14 @@ const App = () => {
     //console.log("POP CLosed ********** ",keys);
     setSelectedColumn(keys);
     setSelectrowValue(keys);
-    setSelectedKeys(keys)
+    setSelectedKeys(keys);
     let temp = {};
     keys.forEach((ele) => {
       temp[ele] = ele;
     });
     setSelectedColumnValues(temp);
-    getFilterData("", "", "", keys);
+    setStatetableData([])
+    getFilterData(keys);
     const tableBody = document.querySelector(".table-container tbody");
     const tableBodyRows = document.querySelectorAll(
       ".table-container tbody tr"
@@ -455,15 +452,32 @@ const App = () => {
     setSelectrowValue(updateColumnValue);
     setSelectedKeys(updateColumnValue);
     //console.log("Updated Column Array->  ", updateColumnValue);
+    setStatetableData([])
 
-    getFilterData("", "", "", updateColumnValue);
+
+    getFilterData(updateColumnValue);
   };
 
-  const getFilterData = async (item, location, cusotmer, arrayData) => {
+  const getFilterData = async ( arrayData,calling=false) => {
     const selectedValuesArray = Object.values(selectedColumnValues);
-    setLoading(true);
 
-    //console.log(" Get Filter Call *** ");
+    setLoad(true)
+    let pagenum=1
+    if(!calling)
+    { console.log(" value in calling ",calling)
+    setPage(1)
+    statetableData=[]
+    setStatetableData([])
+    setLoading(true);
+    }
+    if(calling)
+    {
+      pagenum=page+1
+      setPage((prevPage) => prevPage + 1);
+      console.log("page number ",pagenum)
+    }
+    
+    console.log(" Get Filter Call *** ");
 
     if (arrayData.length > 0) {
       let query = "";
@@ -480,15 +494,17 @@ const App = () => {
         BaseUrl +
         "/?fields=" +
         query +
-        `,${type[0]},${type[1]}&page=1&page_size=1000`;
+        `,${type[0]},${type[1]}&page=${pagenum}&page_size=700`;
 
-      //console.log("filter URL Preapred", url);
+      console.log("filter URL Preapred", url);
       const response = await axios.get(url);
 
+     
+     
+     
       const responseColumnData = await axios.get(
-        `https://horizon-app.onrender.com/api/dates/?page=1&page_size=160`
+        `https://horizon-app.onrender.com/api/dates/?page=1&page_size=1200`
       );
-
 
       //console.log(" filter table row data ",response.data.results," type  ",type)
       const getValidFormateofColumnValue = await getValidFormateofColumn(
@@ -500,61 +516,71 @@ const App = () => {
         setSelectedRowKeys([]);
 
         setSelectedRowscheck([]);
-       
       }, 2000);
 
+      let column = await tableData(
+        response.data.results,
+        getValidFormateofColumnValue,
+        arrayData,
+        type
+      );
+      console.log("filter TableData function after ",column);
 
-  
-
-   
-      let column = await tableData(response.data.results,getValidFormateofColumnValue,arrayData,type);
-      //console.log("filter TableData function after ",column);
-  
-      const charTableData=createChartData(column.tableData,column.dateColumn,type,arrayData)
+      const charTableData = createChartData(
+        column.tableData,
+        column.dateColumn,
+        type,
+        arrayData
+      );
       //console.log("chartTable  filter ",charTableData)
-        // setresultApiData(responseTableData.data.results);
-        setresultApiData(charTableData)
-        setType(type)
+      // setresultApiData(responseTableData.data.results);
+      setresultApiData(charTableData);
 
-        const newRows = column.tableData;
-        const prevIds = new Set(statetableData.map((row) => row.id));
-  
-        // Filter out rows with IDs already present in the previous data
-        const filteredNewRows = newRows.filter((row) => !prevIds.has(row.id));
-  
-        // Combine the filtered new data with the previous data
-        const updatedData = [...statetableData, ...filteredNewRows];
-  
-        // setStatetableData((prevData) => [...prevData, ...updatedData]);
-        setStatetableData(column.tableData);
-  
-        const updatecolumn = column.precolumn.map((col, index) => ({
-          ...col,
-          width: calculateColumnWidth(col.dataIndex || col.title),
-        }));
-  
-        setcolumns(updatecolumn);
-        settoatlwidth(updatecolumn.length);
-        setdynamicColumns(updatecolumn);
-        setPagination((prevPagination) => ({
-          ...prevPagination,
-          total: column.tableData.length,
-        })); 
-          //console.log(" get ChartTable Data filter")
-        setLoading(false);
+      setType(type);
+      console.log(" the value of tabe ",statetableData.length)
+      const newRows = column.tableData;
+      const prevIds = new Set(statetableData.map((row) => row.id));
 
+      // Filter out rows with IDs already present in the previous data
+      const filteredNewRows = newRows.filter((row) => !prevIds.has(row.id));
 
+      // Combine the filtered new data with the previous data
+      const updatedData = [...statetableData, ...filteredNewRows];
+
+      // setStatetableData((prevData) => [...prevData, ...updatedData]);
+      setStatetableData(updatedData);
+
+      const updatecolumn = column.precolumn.map((col, index) => ({
+        ...col,
+        width: calculateColumnWidth(col.dataIndex || col.title),
+      }));
+
+      setcolumns(updatecolumn);
+   
+
+      setPagination((prevPagination) => ({
+        ...prevPagination,
+        total: column.tableData.length,
+      }));
+      //console.log(" get ChartTable Data filter")
+      setLoading(false);
+      setLoad(false)
     }
   };
 
   //Api Data for Table
   useEffect(() => {
-    fetchData(pagination.current, ["sweek", "fweek"]);
+    // getFilterData(pagination.current, ["sweek", "fweek"]);
+    setStatetableData([])
+    getFilterData(selectedKeys)
   }, []);
 
+  useEffect(()=>{
+    console.log("selected keys call")
+    setStatetableData([])
+    setStatetableData(statetableData.length=0);
+  },[selectedKeys])
   /*********** */
-
-
 
   const tableData = async (
     responseTableData,
@@ -567,8 +593,6 @@ const App = () => {
       type
     );
 
- 
-
     let precolumn = await createColumns(keys);
 
     //Start Date and EnD Date
@@ -578,7 +602,7 @@ const App = () => {
       SetgetDate(true);
     }, 2000);
 
-    let dateColumn=[]
+    let dateColumn = [];
     for (let i = 0; i < responseColumnDatavalue.length; i++) {
       let temp = {
         title: responseColumnDatavalue[i],
@@ -609,16 +633,16 @@ const App = () => {
         className: "customDynamicColumn",
         // selected: selectedValue,
       };
-      dateColumn.push(temp)
+      dateColumn.push(temp);
       precolumn.push(temp);
     }
 
     let tableData = await createtableData(responseTableData, keys, type);
-//console.log(" table data createtableData",tableData)
+    //console.log(" table data createtableData",tableData)
     return {
       precolumn: precolumn,
       tableData: tableData,
-      dateColumn: dateColumn
+      dateColumn: dateColumn,
     };
   };
 
@@ -662,7 +686,7 @@ const App = () => {
 
   function DDMMYY(inputDateString) {
     const dateObject = new Date(inputDateString);
-  
+
     const formattedDate = dateObject.toLocaleDateString("en-GB", {
       day: "2-digit",
       month: "2-digit",
@@ -673,38 +697,37 @@ const App = () => {
 
   const createtableData = (results, keys, type) => {
     //
-    console.group("createtableData ",results,type)
-    let finalRowData=[]
+    // console.group("createtableData ", results, type);
+    let finalRowData = [];
 
     results.forEach((elementrow) => {
       let temp = elementrow.combination;
-      temp.id=elementrow.id
+      temp.id = elementrow.id;
       elementrow.data.forEach((element) => {
-      let date = element[type[0]] != null ? element[type[0]] : element[type[1]];
-      let skipCount = 0;
-      for (const key in element.aggregates) {
+        let date =
+          element[type[0]] != null ? element[type[0]] : element[type[1]];
+        let skipCount = 0;
+        for (const key in element.aggregates) {
           if (skipCount < 2) {
-              skipCount++;
-            
-              temp[DDMMYY(date)] =element[type[0]] != null? element.aggregates.sum_sqty: element.aggregates.sum_fqty;
-              continue;
-            }
-            else{
-              temp[key]=element.aggregates[key]
-            }
-         
-         
-      }
+            skipCount++;
+
+            temp[DDMMYY(date)] =
+              element[type[0]] != null
+                ? element.aggregates.sum_sqty
+                : element.aggregates.sum_fqty;
+            continue;
+          } else {
+            temp[key] = element.aggregates[key];
+          }
+        }
       });
-     
-     
-      finalRowData.push(temp)
+
+      finalRowData.push(temp);
     });
-  
-    
+
     //console.log("createtableData finalRowData  ",finalRowData)
-    console.groupEnd("createtableData finalRowData  ",finalRowData)
-    return finalRowData
+    // console.groupEnd("createtableData finalRowData  ", finalRowData);
+    return finalRowData;
   };
 
   const getColumnSubData = async (find) => {
@@ -858,65 +881,58 @@ const App = () => {
     // Do something with the data received from the child
     //console.log("Data from child:", dataFromChild);
     fetchData(pagination.current, dataFromChild);
-}
+  }
 
+  const handleScroll = async () => {
+    const tableDiv = tableRef.current;
+    // console.log(" loading value ",loading, " tableDiv.scrollTop= ",
+    //  tableDiv.scrollTop,"  tableDiv.clientHeight= ",tableDiv.clientHeight,"  tableDiv.scrollHeight=",tableDiv.scrollHeight)
+    if (
+      tableDiv.scrollTop + tableDiv.clientHeight >=
+      tableDiv.scrollHeight - 20
+    ) {
+      // console.log(" loading value ", loading);
 
-
-
-
-const handleScroll = async() => {
-  const tableDiv = tableRef.current;
-  // console.log(" loading value ",loading, " tableDiv.scrollTop= ", 
-  //  tableDiv.scrollTop,"  tableDiv.clientHeight= ",tableDiv.clientHeight,"  tableDiv.scrollHeight=",tableDiv.scrollHeight)
-  if (
-    tableDiv.scrollTop + tableDiv.clientHeight >=
-    tableDiv.scrollHeight-20
-  ) {
-   console.log(" loading value ",loading)
- 
-    if (!loading) {
-      console.log(" on scrolling ")
-      let data=await fetchData(pagination.current, type);
+      if (!load) {
+        console.log(" on scrolling ");
+        await  getFilterData(selectedKeys,true)
+        // let data = await fetchData(pagination.current, type,true);
+      }
     }
-  }
-};
-
-
-
-
-
-const handleSave = (row) => {
-  const newData = [...statetableData];
-  const index = newData.findIndex((item) => row.key === item.key);
-  const item = newData[index];
-  newData.splice(index, 1, {
-    ...item,
-    ...row,
-  });
-  setStatetableData(newData);
-};
-const components = {
-  body: {
-    row: EditableRow,
-    cell: EditableCell,
-  },
-};
-const columns = statecolumns.map((col) => {
-  if (!col.editable) {
-    return col;
-  }
-
-  return {
-    ...col,
-    onCell: (record) => ({
-      record,
-      editable: col.editable,
-      dataIndex: col.dataIndex,
-      title: col.title,
-      handleSave,
-    }),
   };
-});
+
+  const handleSave = (row) => {
+    const newData = [...statetableData];
+    const index = newData.findIndex((item) => row.key === item.key);
+    const item = newData[index];
+    newData.splice(index, 1, {
+      ...item,
+      ...row,
+    });
+    setStatetableData(newData);
+  };
+  const components = {
+    body: {
+      row: EditableRow,
+      cell: EditableCell,
+    },
+  };
+  const columns = statecolumns.map((col) => {
+    if (!col.editable) {
+      return col;
+    }
+
+    return {
+      ...col,
+      onCell: (record) => ({
+        record,
+        editable: col.editable,
+        dataIndex: col.dataIndex,
+        title: col.title,
+        handleSave,
+      }),
+    };
+  });
   /***************** */
 
   return (
@@ -933,7 +949,13 @@ const columns = statecolumns.map((col) => {
         >
           {/* {" "} */}
           {/* console.log("start date ",startDate, "endDate ",endDate); */}
-          {getdate && <Datepick startDate={startDate} endDate={endDate} onDataFromChild={handleDataTypeChange}/>}
+          {getdate && (
+            <Datepick
+              startDate={startDate}
+              endDate={endDate}
+              onDataFromChild={handleDataTypeChange}
+            />
+          )}
         </Col>
         <Col xs={8} sm={10} md={11} lg={9} xl={8} className="filterdata">
           {/* </Col> */}
@@ -958,11 +980,11 @@ const columns = statecolumns.map((col) => {
         </Col>
       </Row>
       <Row>
-        <div className={`card-body-2${isMaximized?'maximized':""}` }
-             style={{ overflowY: 'auto', overflowX: 'auto' }}
-             onScroll={handleScroll}
-             ref={tableRef}
-      >
+      <div className={`card-body-2${isMaximized?'maximized':""}` }
+          style={{ overflowY: "auto", overflowX: "auto" }}
+          onScroll={handleScroll}
+          ref={tableRef}
+        >
           <Row gutter={16} style={{ height: "100%" }}>
             <Col xs={1} sm={1} md={1} lg={1} xl={1} style={{ height: "100%" }}>
               <Button
@@ -986,23 +1008,12 @@ const columns = statecolumns.map((col) => {
                 )}
               </Button>
             </Col>
-            <Col
-              xs={23}
-              sm={23}
-              md={23}
-              lg={23}
-              xl={23}
-         
-              className="tableclass"
-       
-         
-            >
-         
-        <Table
+            <Col xs={23} sm={23} md={23} lg={23} xl={23} className="tableclass">
+              <Table
                 rowKey="id"
                 onChange={handleTableChange}
                 components={components}
-                rowClassName={() => 'editable-row'}
+                rowClassName={() => "editable-row"}
                 rowSelection={{ ...rowSelection, columnWidth: "2%" }}
                 columns={columns}
                 style={tableStyle}
@@ -1014,12 +1025,10 @@ const columns = statecolumns.map((col) => {
                 //   x: `calc(700px + ${statecolumns.length * 5}%)`,
                 //   y: 500
                 // }}
-            
-            
+
                 pagination={false}
               />
-      
-          
+
               {/* <Table
                 rowKey="id"
                 onChange={handleTableChange}
